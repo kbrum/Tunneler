@@ -1,0 +1,26 @@
+{
+  "name": "tunneler",
+  "version": "1.0.0",
+  "description": "**Tunneler** é um gerenciador de sessões SSH moderno e eficiente, construído para simplificar a administração de servidores remotos.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kbrum/Tunneler.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kbrum/Tunneler/issues"
+  },
+  "homepage": "https://github.com/kbrum/Tunneler#readme",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
+  }
+}
