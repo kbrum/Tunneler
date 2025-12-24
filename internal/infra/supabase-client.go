@@ -8,7 +8,7 @@ import (
 )
 
 func CreateSupabaseClient() (*supabase.Client, error) {
-	client, err := supabase.NewClient(os.Getenv("SUPABASE_URL"), os.Getenv("SUPABASE_KEY"), &supabase.ClientOptions{})
+	client, err := supabase.NewClient(os.Getenv("SUPABASE_URL"), os.Getenv("PUBLIC_SUPABASE_KEY"), &supabase.ClientOptions{})
 	if err != nil {
 		log.Fatal(err)
 	}

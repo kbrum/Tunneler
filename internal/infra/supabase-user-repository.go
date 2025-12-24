@@ -5,6 +5,7 @@ import (
 
 	"tunneler/internal/domain"
 
+	"github.com/supabase-community/gotrue-go/types"
 	"github.com/supabase-community/supabase-go"
 )
 
@@ -13,8 +14,22 @@ type SupabaseUserRepository struct {
 	ctx    context.Context  //nolint:unused
 }
 
-func (s SupabaseUserRepository) CreateUser(ctx context.Context, user *domain.User) error {
-	return nil
+func (s SupabaseUserRepository) CreateUser(ctx context.Context, client *supabase.Client, user *domain.User) (*types.SignupResponse, error) {
+	req := types.SignupRequest{
+		Email:    user.Email,
+		Password: user.Password,
+		Data: map[string]interface{ any }{
+			"name":     user.Name,
+			"username": user.Username,
+		},
+	}
+
+	response, err := client.Auth.Signup(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 func (s SupabaseUserRepository) GetUserByID(ctx context.Context, id int) (*domain.User, error) {
