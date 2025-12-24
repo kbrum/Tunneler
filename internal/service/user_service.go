@@ -23,6 +23,10 @@ func (s *UserService) Create(ctx context.Context, req dto.CreateUserRequest) err
 		Password: req.Password,
 	}
 
+	if err := domain.Validate(user); err != nil {
+		return err
+	}
+
 	return s.repo.Create(ctx, user)
 }
 
@@ -43,4 +47,8 @@ func (s *UserService) Login(ctx context.Context, req dto.LoginRequest) (*dto.Ses
 		ExpiresIn:    session.ExpiresIn,
 		UserEmail:    session.User.Email,
 	}, nil
+}
+
+func (s *UserService) Logout(ctx context.Context, session *domain.Session) error {
+	return s.repo.Logout(ctx, session)
 }

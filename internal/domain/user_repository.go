@@ -5,12 +5,13 @@ import "context"
 type UserRepository interface {
 	Create(ctx context.Context, user *User) error
 	Login(ctx context.Context, user *User) (*Session, error)
-	GetByID(ctx context.Context, uuid string) (*User, error)
-	GetByUsername(ctx context.Context, username string) (*User, error)
-	GetUserByEmail(ctx context.Context, email string) (*User, error)
-	UpdateName(ctx context.Context, user *User) error
-	UpdateEmail(ctx context.Context, user *User) error
-	UpdatePassword(ctx context.Context, user *User) error
-	UpdateUsername(ctx context.Context, user *User) error
-	Delete(ctx context.Context, uuid string) error
+	LoginGoogleProvider(ctx context.Context, user *User) (*Session, error)
+	LoginGithubProvider(ctx context.Context, user *User) (*Session, error)
+	Logout(ctx context.Context, session *Session) error
+	GetUser(ctx context.Context, session *Session) (*User, error)
+	UpdateName(ctx context.Context, session *Session) error
+	UpdateEmail(ctx context.Context, session *Session) error
+	UpdatePassword(ctx context.Context, session *Session) error
+	UpdateUsername(ctx context.Context, session *Session) error
+	Delete(ctx context.Context, session *Session) error
 }

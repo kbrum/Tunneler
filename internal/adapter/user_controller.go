@@ -3,6 +3,7 @@ package adapter
 import (
 	"context"
 
+	"tunneler/internal/domain"
 	"tunneler/internal/dto"
 	"tunneler/internal/service"
 )
@@ -40,4 +41,11 @@ func (c *UserController) LoginUser(email, password string) (*dto.SessionResponse
 	}
 
 	return c.userService.Login(c.ctx, req)
+}
+
+func (c *UserController) LogoutUser(req dto.LogoutRequest) error {
+	session := &domain.Session{
+		AccessToken: req.AccessToken,
+	}
+	return c.userService.Logout(c.ctx, session)
 }

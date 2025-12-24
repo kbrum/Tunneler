@@ -23,7 +23,20 @@ type Session struct {
 	User         User
 }
 
-func ValidateName(user User) error {
+var (
+	NameEmptyError          = errors.New("Name cannot be empty")
+	NameSizeError           = errors.New("Name must be between 2 and 100 characters")
+	UsernameEmptyError      = errors.New("Username cannot be empty")
+	UsernameSizeError       = errors.New("Username must be between 2 and 30 characters")
+	UsernameFormatError     = errors.New("Username can only contain letters, numbers, underscores and hyphens")
+	EmailEmptyError         = errors.New("Email cannot be empty")
+	EmailValidationError    = errors.New("Invalid email, please check and try again")
+	PasswordEmptyError      = errors.New("Password cannot be empty")
+	PasswordSizeError       = errors.New("Password must be between 8 and 100 characters")
+	PasswordComplexityError = errors.New("Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character")
+)
+
+func ValidateName(user *User) error {
 	if user.Name == "" {
 		return NameEmptyError
 	}
@@ -35,7 +48,7 @@ func ValidateName(user User) error {
 	return nil
 }
 
-func ValidateUsername(user User) error {
+func ValidateUsername(user *User) error {
 	if user.Username == "" {
 		return UsernameEmptyError
 	}
@@ -53,7 +66,7 @@ func ValidateUsername(user User) error {
 	return nil
 }
 
-func ValidateEmail(user User) error {
+func ValidateEmail(user *User) error {
 	if user.Email == "" {
 		return EmailValidationError
 	}
@@ -66,7 +79,7 @@ func ValidateEmail(user User) error {
 	return nil
 }
 
-func ValidatePassword(user User) error {
+func ValidatePassword(user *User) error {
 	if user.Password == "" {
 		return PasswordEmptyError
 	}
@@ -97,7 +110,7 @@ func ValidatePassword(user User) error {
 	return nil
 }
 
-func Validate(user User) error {
+func Validate(user *User) error {
 	if err := ValidateName(user); err != nil {
 		return err
 	}
@@ -112,16 +125,3 @@ func Validate(user User) error {
 	}
 	return nil
 }
-
-var (
-	NameEmptyError          = errors.New("Name cannot be empty")
-	NameSizeError           = errors.New("Name must be between 2 and 100 characters")
-	UsernameEmptyError      = errors.New("Username cannot be empty")
-	UsernameSizeError       = errors.New("Username must be between 2 and 30 characters")
-	UsernameFormatError     = errors.New("Username can only contain letters, numbers, underscores and hyphens")
-	EmailEmptyError         = errors.New("Email cannot be empty")
-	EmailValidationError    = errors.New("Invalid email, please check and try again")
-	PasswordEmptyError      = errors.New("Password cannot be empty")
-	PasswordSizeError       = errors.New("Password must be between 8 and 100 characters")
-	PasswordComplexityError = errors.New("Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character")
-)
