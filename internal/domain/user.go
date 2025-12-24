@@ -3,17 +3,24 @@ package domain
 import (
 	"errors"
 	"net/mail"
-	"time"
 	"unicode"
 )
 
 type User struct {
-	ID        int
-	Name      string
-	Username  string
-	Email     string
-	Password  string
-	CreatedAt time.Time
+	UUID     string
+	Name     string
+	Username string
+	Email    string
+	Password string
+}
+
+type Session struct {
+	AccessToken  string
+	RefreshToken string
+	TokenType    string
+	ExpiresIn    int
+	ExpiresAt    int64
+	User         User
 }
 
 func ValidateName(user User) error {

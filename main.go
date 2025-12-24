@@ -8,6 +8,10 @@ import (
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+
+	"tunneler/internal/adapter"
+	"tunneler/internal/infra"
+	"tunneler/internal/service"
 )
 
 //go:embed all:frontend/dist
@@ -18,11 +22,20 @@ func main() {
 		log.Println("No .env file found")
 	}
 
+	client, err := infra.CreateSupabaseClient()
+	if err != nil {
+		log.Fatal("Error creating supabase client:", err)
+	}
+
+	userRepository := infra.NewSupabaseUserRepository(client)
+	userService := service.NewUserService(userRepository)
+	userController := adapter.NewUserController(userService)
+
 	// Create an instance of the app structure
-	app := NewApp()
+	app := NewApp(userController)
 
 	// Create application with options
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:  "tunneler",
 		Width:  1024,
 		Height: 768,
@@ -33,6 +46,7 @@ func main() {
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
+			userController,
 		},
 	})
 	if err != nil {

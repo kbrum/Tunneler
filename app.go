@@ -2,20 +2,22 @@ package main
 
 import (
 	"context"
+
+	"tunneler/internal/adapter"
 )
 
-// App struct
 type App struct {
-	ctx context.Context
+	ctx            context.Context
+	userController *adapter.UserController
 }
 
-// NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
+func NewApp(userController *adapter.UserController) *App {
+	return &App{
+		userController: userController,
+	}
 }
 
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	a.userController.Startup(ctx)
 }

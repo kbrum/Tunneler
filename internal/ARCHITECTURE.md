@@ -24,21 +24,16 @@ Este projeto segue uma adaptação da Clean Architecture para Go e Wails, visand
 
 ### 4. `adapter/` (Interface Adapters / Wails IPC)
 *   **O que é:** A porta de entrada para o Frontend.
-*   **Conteúdo:** Controllers expostos ao Wails via IPC.
-*   **Função:** Recebe chamadas do JavaScript, converte DTOs, chama o `service` e retorna a resposta.
-*   **Regra de Ouro:** Não contém regra de negócio. Apenas validação básica de entrada e conversão de dados.
-
-### 5. `dto/` (Data Transfer Objects)
-*   **O que é:** Objetos de transporte simples.
-*   **Conteúdo:** Structs com tags `json` usadas exclusivamente para comunicação com o Frontend.
-*   **Regra de Ouro:** Separa o modelo de domínio (puro) do modelo de visualização (JSON).
+*   **Conteúdo:** Controllers expostos ao Wails via IPC (ex: `UserController`).
+*   **Função:** Recebe chamadas do JavaScript, converte dados de entrada (strings/primitivos), chama o `service` (ou `repository` em casos simples) e retorna a resposta.
+*   **Regra de Ouro:** Não contém regra de negócio complexa. Funciona como um tradutor entre a Tela e o Backend.
 
 ---
 
 ## Outros Arquivos
 
 ### `app.go`
-*   **Função:** Orquestrador do Ciclo de Vida (Startup/Shutdown). Configura a injeção de dependência e inicializa os Adapters.
+*   **Função:** Orquestrador do Ciclo de Vida (Startup/Shutdown). Centraliza a inicialização dos Controllers (`adapter`) e gerencia o contexto da aplicação.
 
 ### `main.go`
-*   **Função:** Ponto de entrada (Entry Point). Inicializa o Wails e carrega as configurações.
+*   **Função:** Ponto de entrada (Entry Point). Faz a "Costura" das dependências (Cria Client -> Cria Repo -> Cria Controller -> Cria App) e inicializa o Wails.
