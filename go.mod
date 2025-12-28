@@ -4,6 +4,7 @@ go 1.23
 
 require (
 	github.com/joho/godotenv v1.5.1
+	github.com/supabase-community/gotrue-go v1.2.0
 	github.com/supabase-community/supabase-go v0.0.4
 	github.com/wailsapp/wails/v2 v2.11.0
 )
@@ -28,7 +29,6 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/samber/lo v1.49.1 // indirect
 	github.com/supabase-community/functions-go v0.0.0-20220927045802-22373e6cb51d // indirect
-	github.com/supabase-community/gotrue-go v1.2.0 // indirect
 	github.com/supabase-community/postgrest-go v0.0.12 // indirect
 	github.com/supabase-community/storage-go v0.7.0 // indirect
 	github.com/tkrajina/go-reflector v0.5.8 // indirect

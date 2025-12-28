@@ -57,13 +57,15 @@ func (s *SupabaseUserRepository) Login(ctx context.Context, user *domain.User) (
 }
 
 func (s *SupabaseUserRepository) LoginGoogleProvider(ctx context.Context, user *domain.User) (*domain.Session, error) {
-	// TODO: Implement Google Login
 	return nil, nil
 }
 
 func (s *SupabaseUserRepository) LoginGithubProvider(ctx context.Context, user *domain.User) (*domain.Session, error) {
-	// TODO: Implement Github Login
 	return nil, nil
+}
+
+func (s *SupabaseUserRepository) IsAuthenticated(ctx context.Context) (bool, error) {
+	return false, nil
 }
 
 func (s *SupabaseUserRepository) Logout(ctx context.Context, session *domain.Session) error {
@@ -73,6 +75,10 @@ func (s *SupabaseUserRepository) Logout(ctx context.Context, session *domain.Ses
 	}
 
 	return nil
+}
+
+func (s *SupabaseUserRepository) GetSession(ctx context.Context, user *domain.User) (*domain.Session, error) {
+	return nil, nil
 }
 
 func (s *SupabaseUserRepository) GetUser(ctx context.Context, session *domain.Session) (*domain.User, error) {

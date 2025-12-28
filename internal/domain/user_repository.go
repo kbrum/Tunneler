@@ -8,6 +8,7 @@ type UserRepository interface {
 	LoginGoogleProvider(ctx context.Context, user *User) (*Session, error)
 	LoginGithubProvider(ctx context.Context, user *User) (*Session, error)
 	Logout(ctx context.Context, session *Session) error
+	GetSession(ctx context.Context, user *User) (*Session, error)
 	GetUser(ctx context.Context, session *Session) (*User, error)
 	UpdateName(ctx context.Context, session *Session) error
 	UpdateEmail(ctx context.Context, session *Session) error
