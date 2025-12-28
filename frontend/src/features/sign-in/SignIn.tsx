@@ -24,7 +24,7 @@ export function SignIn() {
 
         <CardContent className="flex flex-col gap-4 pb-3">
           <EmailInput />
-          <PasswordInput />
+          <PasswordInput placeholder="Enter your password" />
         </CardContent>
 
         <CardContent className="flex flex-col items-center justify-center gap-7 p-2 pt-0">

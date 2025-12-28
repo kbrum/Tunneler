@@ -10,8 +10,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useState } from 'react';
+import type { PasswordInputProps } from '@/types/password-types';
 
-export function PasswordInput() {
+export function PasswordInput({ placeholder }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -19,7 +20,7 @@ export function PasswordInput() {
       <InputGroupInput
         className="font-medium text-[#a1a1aa]"
         type={showPassword ? 'text' : 'password'}
-        placeholder="Enter your password"
+        placeholder={placeholder}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             // Handle login logic here
