@@ -25,8 +25,7 @@ func (s *SupabaseUserRepository) Create(ctx context.Context, user *domain.User) 
 		Email:    user.Email,
 		Password: user.Password,
 		Data: map[string]interface{}{
-			"name":     user.Name,
-			"username": user.Username,
+			"name": user.Name,
 		},
 	}
 

@@ -18,7 +18,6 @@ func NewUserService(repo domain.UserRepository) *UserService {
 func (s *UserService) Create(ctx context.Context, req dto.CreateUserRequest) error {
 	user := &domain.User{
 		Name:     req.Name,
-		Username: req.Username,
 		Email:    req.Email,
 		Password: req.Password,
 	}

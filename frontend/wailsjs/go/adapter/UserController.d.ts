@@ -7,7 +7,6 @@ export function CreateUser(
   arg1: string,
   arg2: string,
   arg3: string,
-  arg4: string,
 ): Promise<void>;
 
 export function LoginUser(

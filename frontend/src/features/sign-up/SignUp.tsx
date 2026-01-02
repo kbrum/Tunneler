@@ -1,16 +1,46 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmailInput } from '@/components/EmailInput';
+import { FullNameInput } from '@/components/FullNameInput';
+import { PasswordInput } from '@/components/PasswordInput';
+import { SubmitButton } from '@/components/SubmitButton';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Link } from 'react-router-dom';
 
 export function SignUp() {
   return (
     <div className="flex h-screen items-center justify-center bg-[#09090b]">
-      <Card className="flex h-150 w-107.5 flex-col gap-2 border-[#27272a] bg-[#18181b]">
+      <Card className="flex h-fit max-w-100 flex-col border-[#27272a] bg-[#18181b]">
         <CardHeader className="flex items-center justify-center">
-          <CardTitle className="text-5xl font-bold text-[#fafafa]">
+          <CardTitle className="text-3xl font-bold text-[#fafafa]">
             Register
           </CardTitle>
-
-          <CardContent></CardContent>
         </CardHeader>
+
+        <CardContent className="flex flex-col items-center justify-center gap-4 pt-0 pb-0">
+          <FullNameInput />
+          <EmailInput />
+          <PasswordInput placeholder="Enter your password" />
+          <PasswordInput placeholder="Confirm your password" />
+
+          <SubmitButton text="Sign Up" />
+        </CardContent>
+
+        <CardFooter className="flex flex-col items-center pt-6 pb-3">
+          <p className="text-sm font-normal text-[#71717a]">
+            Already have an account?{' '}
+            <Link
+              className="text-sm font-semibold text-[#fafafa] hover:font-semibold hover:text-[#ffffff] hover:underline"
+              to="/"
+            >
+              Sign In
+            </Link>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );

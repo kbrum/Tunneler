@@ -23,12 +23,11 @@ func (c *UserController) Startup(ctx context.Context) {
 	c.ctx = ctx
 }
 
-func (c *UserController) CreateUser(email, password, name, username string) error {
+func (c *UserController) CreateUser(email, password, name string) error {
 	req := dto.CreateUserRequest{
 		Email:    email,
 		Password: password,
 		Name:     name,
-		Username: username,
 	}
 
 	return c.userService.Create(c.ctx, req)

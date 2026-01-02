@@ -1,7 +1,7 @@
 import { EmailInput } from '@/components/EmailInput';
 import { GithubProviderLogin } from '@/components/GithubProviderLogin';
 import { GoogleProviderLogin } from '@/components/GoogleProviderLogin';
-import { LoginButton } from '@/components/SignInButton';
+import { SubmitButton } from '@/components/SubmitButton';
 import { PasswordInput } from '@/components/PasswordInput';
 import {
   Card,
@@ -15,37 +15,43 @@ import { Link } from 'react-router-dom';
 export function SignIn() {
   return (
     <div className="flex h-screen items-center justify-center bg-[#09090b]">
-      <Card className="flex h-110 w-107.5 flex-col gap-2 border-[#27272a] bg-[#18181b]">
+      <Card className="flex h-fit max-w-100 flex-col border-[#27272a] bg-[#18181b]">
         <CardHeader className="flex items-center justify-center">
-          <CardTitle className="text-5xl font-bold text-[#fafafa]">
+          <CardTitle className="text-3xl font-bold text-[#fafafa]">
             Login
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="flex flex-col gap-4 pb-3">
+        <CardContent className="flex flex-col items-center justify-center gap-4 pt-0 pb-3">
           <EmailInput />
           <PasswordInput placeholder="Enter your password" />
+
+          <div className="flex w-full justify-end">
+            <Link
+              className="justify-start text-sm font-normal text-[#fafafa] hover:text-[#ffffff] hover:underline"
+              to="/signup"
+            >
+              Forgot password?
+            </Link>
+          </div>
+
+          <SubmitButton text="Sign In" />
+
+          <p className="my-2 flex items-center justify-center font-medium text-[#a1a1aa]">
+            or continue with
+          </p>
+
+          <div className="flex w-full justify-center space-x-4">
+            <GoogleProviderLogin />
+            <GithubProviderLogin />
+          </div>
         </CardContent>
 
-        <CardContent className="flex flex-col items-center justify-center gap-7 p-2 pt-0">
-          <LoginButton />
-        </CardContent>
-
-        <p className="flex items-center justify-center font-medium text-[#a1a1aa]">
-          or
-        </p>
-
-        <CardContent className="flex flex-row items-center justify-between pt-2 pb-3">
-          <GoogleProviderLogin />
-          <GithubProviderLogin />
-        </CardContent>
-
-        <CardFooter className="flex flex-col items-center">
-          <p className="font-normal text-[#71717a]">
-            <br />
+        <CardFooter className="flex flex-col items-center pt-3 pb-3">
+          <p className="text-sm font-normal text-[#71717a]">
             Don&apos;t have an account?{' '}
             <Link
-              className="font-semibold text-[#fafafa] hover:font-semibold hover:text-[#ffffff] hover:underline"
+              className="text-sm font-semibold text-[#fafafa] hover:font-semibold hover:text-[#ffffff] hover:underline"
               to="/signup"
             >
               Sign Up

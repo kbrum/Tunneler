@@ -9,7 +9,6 @@ import (
 type User struct {
 	UUID     string
 	Name     string
-	Username string
 	Email    string
 	Password string
 }
@@ -43,24 +42,6 @@ func ValidateName(user *User) error {
 
 	if len(user.Name) < 2 || len(user.Name) > 100 {
 		return NameSizeError
-	}
-
-	return nil
-}
-
-func ValidateUsername(user *User) error {
-	if user.Username == "" {
-		return UsernameEmptyError
-	}
-
-	if len(user.Username) < 2 || len(user.Username) > 30 {
-		return UsernameSizeError
-	}
-
-	for _, char := range user.Username {
-		if !unicode.IsLetter(char) && !unicode.IsNumber(char) && char != '_' && char != '-' {
-			return UsernameFormatError
-		}
 	}
 
 	return nil
@@ -112,9 +93,6 @@ func ValidatePassword(user *User) error {
 
 func Validate(user *User) error {
 	if err := ValidateName(user); err != nil {
-		return err
-	}
-	if err := ValidateUsername(user); err != nil {
 		return err
 	}
 	if err := ValidateEmail(user); err != nil {
