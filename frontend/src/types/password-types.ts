@@ -1,3 +1,5 @@
 export interface PasswordInputProps {
-  placeholder: string;
+  placeholder?: string;
+  tooltip?: boolean;
+  className?: string;
 }

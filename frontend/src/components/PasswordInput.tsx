@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import type { PasswordInputProps } from '@/types/password-types';
 
-export function PasswordInput({ placeholder }: PasswordInputProps) {
+export function PasswordInput({ placeholder, tooltip }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -42,17 +42,19 @@ export function PasswordInput({ placeholder }: PasswordInputProps) {
             <EyeIcon className="h-5 w-5" />
           )}
         </button>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <InfoIcon className="cursor-pointer" />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>
-              Password must be at least 8 characters, 1 uppercase, 1 lowercase,
-              1 number, and 1 special character
-            </p>
-          </TooltipContent>
-        </Tooltip>
+        {tooltip && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <InfoIcon className="cursor-pointer" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                Password must be at least 8 characters, 1 uppercase, 1
+                lowercase, 1 number, and 1 special character
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        )}
       </InputGroupAddon>
     </InputGroup>
   );

@@ -3,7 +3,7 @@ import { FcGoogle } from 'react-icons/fc';
 
 export function GoogleProviderLogin() {
   return (
-    <Button className="w-full bg-[#ffffff] text-[#1f1f1f] hover:bg-[#e4e4e7]">
+    <Button className="w-full bg-[#27272a] text-[#ffffff] hover:bg-[#3f3f46]">
       <FcGoogle />
     </Button>
   );
