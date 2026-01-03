@@ -32,7 +32,7 @@ export function ForgotPassword() {
 
           <Link
             className="text-sm font-medium text-[#fafafa] hover:font-semibold hover:text-[#ffffff] hover:underline"
-            to="/signup"
+            to="/signin"
           >
             Back to Login
           </Link>

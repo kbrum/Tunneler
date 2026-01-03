@@ -3,6 +3,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
+import { cn } from '@/lib/utils';
 import { EyeIcon, EyeOffIcon, InfoIcon, LockIcon } from 'lucide-react';
 import {
   Tooltip,
@@ -12,20 +13,19 @@ import {
 import { useState } from 'react';
 import type { PasswordInputProps } from '@/types/password-types';
 
-export function PasswordInput({ placeholder, tooltip }: PasswordInputProps) {
+export function PasswordInput({
+  tooltip,
+  className,
+  ...props
+}: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <InputGroup>
       <InputGroupInput
-        className="font-medium text-[#a1a1aa]"
         type={showPassword ? 'text' : 'password'}
-        placeholder={placeholder}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            // Handle login logic here
-          }
-        }}
+        {...props}
+        className={cn('font-medium text-[#a1a1aa]', className)}
       />
       <InputGroupAddon align="inline-start">
         <LockIcon />
