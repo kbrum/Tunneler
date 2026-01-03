@@ -1,7 +1,4 @@
 import { EmailInput } from '@/components/EmailInput';
-import { GithubProviderLogin } from '@/components/GithubProviderLogin';
-import { GoogleProviderLogin } from '@/components/GoogleProviderLogin';
-import { SubmitButton } from '@/components/SubmitButton';
 import { PasswordInput } from '@/components/PasswordInput';
 import {
   Card,
@@ -11,6 +8,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
+import { Button } from '@/components/ui/button';
+import { FaGithub } from 'react-icons/fa';
 
 export function SignIn() {
   return (
@@ -29,21 +29,26 @@ export function SignIn() {
           <div className="flex w-full justify-end">
             <Link
               className="justify-start text-sm font-normal text-[#fafafa] hover:text-[#ffffff] hover:underline"
-              to="/signup"
+              to="/forgot-password"
             >
               Forgot password?
             </Link>
           </div>
 
-          <SubmitButton text="Sign In" />
-
+          <Button className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]">
+            Sign In
+          </Button>
           <p className="my-2 flex items-center justify-center text-sm font-medium text-[#a1a1aa]">
             or continue with
           </p>
 
           <div className="flex w-full justify-center space-x-4">
-            <GoogleProviderLogin />
-            <GithubProviderLogin />
+            <Button className="w-full bg-[#27272a] text-[#ffffff] hover:bg-[#3f3f46]">
+              <FcGoogle />
+            </Button>
+            <Button className="w-full bg-[#27272a] text-[#ffffff] hover:bg-[#3f3f46]">
+              <FaGithub />
+            </Button>
           </div>
         </CardContent>
 

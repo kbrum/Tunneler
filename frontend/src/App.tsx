@@ -1,8 +1,8 @@
-import { SignIn } from '@/features/sign-in/SignIn';
+import { SignIn } from '@/features/auth/SignIn';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { SignUp } from '@/features/sign-up/SignUp';
-import { ForgotPassword } from '@/features/sign-in/ForgotPasswrod';
+import { SignUp } from '@/features/auth/SignUp';
+import { ForgotPassword } from '@/features/auth/ForgotPasswrod';
 
 function App() {
   return (
