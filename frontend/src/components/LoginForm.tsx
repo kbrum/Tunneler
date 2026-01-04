@@ -7,6 +7,7 @@ import {emailSchema} from '@/features/auth/utils/auth-schemas';
 import type {EmailSchema} from '@/features/auth/utils/auth-schemas';
 import {Button} from '@/components/ui/button';
 import {Link} from 'react-router-dom';
+import {toast} from 'sonner';
 
 export function LoginForm() {
   const form = useForm<EmailSchema>({
@@ -26,7 +27,9 @@ export function LoginForm() {
     <Form {...form}>
       <form
         className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit, () => {
+          toast.error('Invalid Email or Password');
+        })}
       >
         <FormField
           control={form.control}
