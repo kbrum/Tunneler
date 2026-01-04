@@ -3,9 +3,9 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
-import { User } from 'lucide-react';
+import {User} from 'lucide-react';
 
-export function FullNameInput() {
+export function FullNameInput(props: React.ComponentProps<'input'>) {
   return (
     <InputGroup>
       <InputGroupInput
@@ -17,6 +17,7 @@ export function FullNameInput() {
             // Handle login logic here
           }
         }}
+        {...props}
       />
       <InputGroupAddon>
         <User />

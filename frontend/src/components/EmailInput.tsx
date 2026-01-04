@@ -3,8 +3,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
-import { cn } from '@/lib/utils';
-import { MailIcon } from 'lucide-react';
+import {cn} from '@/lib/utils';
+import {MailIcon} from 'lucide-react';
 import type * as React from 'react';
 
 export function EmailInput({
@@ -14,7 +14,7 @@ export function EmailInput({
   return (
     <InputGroup>
       <InputGroupInput
-        type="email"
+        type="text"
         placeholder="Enter your email"
         {...props}
         className={cn('font-medium text-[#a1a1aa]', className)}

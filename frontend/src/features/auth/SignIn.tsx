@@ -1,5 +1,3 @@
-import { EmailInput } from '@/components/EmailInput';
-import { PasswordInput } from '@/components/PasswordInput';
 import {
   Card,
   CardContent,
@@ -7,10 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
-import { FcGoogle } from 'react-icons/fc';
-import { Button } from '@/components/ui/button';
-import { FaGithub } from 'react-icons/fa';
+import {Link} from 'react-router-dom';
+import {FcGoogle} from 'react-icons/fc';
+import {Button} from '@/components/ui/button';
+import {FaGithub} from 'react-icons/fa';
+import {LoginForm} from '@/components/LoginForm';
 
 export function SignIn() {
   return (
@@ -23,21 +22,8 @@ export function SignIn() {
         </CardHeader>
 
         <CardContent className="flex flex-col items-center justify-center gap-4 pt-0 pb-3">
-          <EmailInput />
-          <PasswordInput placeholder="Enter your password" />
+          <LoginForm />
 
-          <div className="flex w-full justify-end">
-            <Link
-              className="justify-start text-sm font-normal text-[#fafafa] hover:text-[#ffffff] hover:underline"
-              to="/forgot-password"
-            >
-              Forgot password?
-            </Link>
-          </div>
-
-          <Button className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]">
-            Sign In
-          </Button>
           <p className="my-2 flex items-center justify-center text-sm font-medium text-[#a1a1aa]">
             or continue with
           </p>
