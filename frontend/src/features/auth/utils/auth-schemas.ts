@@ -29,7 +29,7 @@ export const emailSchema = z.object({
   email: z.string().email({
     message: 'Invalid email',
   }),
-  password: z.string().min(1, 'A senha é obrigatória'),
+  password: z.string().min(1, 'The password is required'),
 });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;

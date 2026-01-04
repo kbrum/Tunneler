@@ -1,7 +1,5 @@
-import { EmailInput } from '@/components/EmailInput';
-import { FullNameInput } from '@/components/FullNameInput';
-import { PasswordInput } from '@/components/PasswordInput';
-import { Button } from '@/components/ui/button';
+import {RegisterForm} from '@/components/RegisterForm';
+import {Button} from '@/components/ui/button';
 
 import {
   Card,
@@ -10,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { FaGithub } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import {FaGithub} from 'react-icons/fa';
+import {FcGoogle} from 'react-icons/fc';
+import {Link} from 'react-router-dom';
 
 export function SignUp() {
   return (
@@ -25,14 +23,8 @@ export function SignUp() {
         </CardHeader>
 
         <CardContent className="flex flex-col items-center justify-center gap-4 pt-0 pb-0">
-          <FullNameInput />
-          <EmailInput />
-          <PasswordInput placeholder="Enter your password" tooltip={true} />
-          <PasswordInput placeholder="Confirm your password" />
+          <RegisterForm />
 
-          <Button className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]">
-            Sign In
-          </Button>
           <p className="my-2 flex items-center justify-center text-sm font-medium text-[#a1a1aa]">
             or continue with
           </p>

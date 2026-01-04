@@ -18,7 +18,7 @@ export function LoginForm() {
     },
   });
 
-  function handleSubmit(data: EmailSchema) {
+  function handleLogin(data: EmailSchema) {
     console.log('Enviando:', data.email);
     console.log('Enviando:', data.password);
   }
@@ -27,7 +27,7 @@ export function LoginForm() {
     <Form {...form}>
       <form
         className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(handleSubmit, () => {
+        onSubmit={form.handleSubmit(handleLogin, () => {
           toast.error('Invalid Email or Password');
         })}
       >
