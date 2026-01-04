@@ -25,12 +25,19 @@ export const registerSchema = z
     path: ['confirmPassword'],
   });
 
-export const emailSchema = z.object({
+export const loginSchema = z.object({
   email: z.string().email({
     message: 'Invalid email',
   }),
   password: z.string().min(1, 'The password is required'),
 });
 
+export const resetPasswordSchema = z.object({
+  email: z.string().email({
+    message: 'Invalid email',
+  }),
+});
+
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;
-export type EmailSchema = z.infer<typeof emailSchema>;
+export type LoginSchema = z.infer<typeof loginSchema>;

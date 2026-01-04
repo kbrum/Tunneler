@@ -5,7 +5,6 @@ import {
 } from '@/features/auth/utils/auth-schemas';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem} from '@/components/ui/form';
-import {toast} from 'sonner';
 import {NameInput} from '@/components/NameInput';
 import {EmailInput} from '@/components/EmailInput';
 import {PasswordInput} from '@/components/PasswordInput';
@@ -22,21 +21,9 @@ export function RegisterForm() {
     },
   });
 
-  const handleRegister = async (data: RegisterSchema) => {
-    console.log('name', data.name);
-    console.log('email', data.email);
-    console.log('password', data.password);
-    console.log('confirmPassword', data.confirmPassword);
-  };
-
   return (
     <Form {...form}>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(handleRegister, () => {
-          toast.error('Invalid Email or Password');
-        })}
-      >
+      <form className="flex h-full w-full flex-col gap-4">
         <FormField
           control={form.control}
           name="name"

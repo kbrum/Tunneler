@@ -1,5 +1,4 @@
-import { EmailInput } from '@/components/EmailInput';
-import { Button } from '@/components/ui/button';
+import {ResetPasswordForm} from '@/components/ResetPasswordForm';
 import {
   Card,
   CardContent,
@@ -7,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 export function ForgotPassword() {
   return (
@@ -24,11 +23,7 @@ export function ForgotPassword() {
         </CardHeader>
 
         <CardContent className="flex flex-col items-center justify-center gap-4 pb-3">
-          <EmailInput />
-
-          <Button className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]">
-            Reset Password
-          </Button>
+          <ResetPasswordForm />
 
           <Link
             className="text-sm font-medium text-[#fafafa] hover:font-semibold hover:text-[#ffffff] hover:underline"

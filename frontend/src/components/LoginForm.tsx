@@ -3,34 +3,23 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem} from '@/components/ui/form';
 import {EmailInput} from '@/components/EmailInput';
 import {PasswordInput} from '@/components/PasswordInput';
-import {emailSchema} from '@/features/auth/utils/auth-schemas';
-import type {EmailSchema} from '@/features/auth/utils/auth-schemas';
+import {loginSchema} from '@/features/auth/utils/auth-schemas';
+import type {LoginSchema} from '@/features/auth/utils/auth-schemas';
 import {Button} from '@/components/ui/button';
 import {Link} from 'react-router-dom';
-import {toast} from 'sonner';
 
 export function LoginForm() {
-  const form = useForm<EmailSchema>({
-    resolver: zodResolver(emailSchema),
+  const form = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  function handleLogin(data: EmailSchema) {
-    console.log('Enviando:', data.email);
-    console.log('Enviando:', data.password);
-  }
-
   return (
     <Form {...form}>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(handleLogin, () => {
-          toast.error('Invalid Email or Password');
-        })}
-      >
+      <form className="flex h-full w-full flex-col gap-4">
         <FormField
           control={form.control}
           name="email"
