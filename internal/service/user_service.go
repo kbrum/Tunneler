@@ -53,3 +53,12 @@ func (s *UserService) Logout(ctx context.Context) error {
 
 	return nil
 }
+
+func (s *UserService) GetUser(ctx context.Context) (*domain.Session, error) {
+	session, err := s.sessionRepo.GetSession(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return session, nil
+}

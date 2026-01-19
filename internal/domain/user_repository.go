@@ -13,9 +13,3 @@ type UserRepository interface {
 	UpdatePassword(ctx context.Context, newPassword string) error
 	Delete(ctx context.Context) error
 }
-
-type SessionRepository interface {
-	SaveSession(ctx context.Context, session *Session) error
-	GetSession(ctx context.Context) (*Session, error)
-	DeleteSession(ctx context.Context) error
-}

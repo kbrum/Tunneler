@@ -35,11 +35,8 @@ func main() {
 
 	sessionRepository := infra.NewSqliteSessionRepository(db)
 	userRepository := infra.NewSupabaseUserRepository(client)
-
 	userService := service.NewUserService(userRepository, sessionRepository)
-
 	userController := adapter.NewUserController(userService)
-
 	app := NewApp(userController)
 
 	err = wails.Run(&options.App{
