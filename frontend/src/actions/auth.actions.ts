@@ -13,11 +13,8 @@ export async function loginUser(email: string, password: string) {
   }
 }
 
-export async function createUser(
-  email: string,
-  password: string,
-  name: string,
-) {
+// prettier-ignore
+export async function createUser( email: string, password: string,name: string,) {
   try {
     return await CreateUser({email: email, password: password, name: name});
   } catch (error) {
