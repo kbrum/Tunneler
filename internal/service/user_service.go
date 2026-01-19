@@ -7,11 +7,15 @@ import (
 )
 
 type UserService struct {
-	repo domain.UserRepository
+	authRepo    domain.UserRepository
+	sessionRepo domain.SessionRepository
 }
 
-func NewUserService(repo domain.UserRepository) *UserService {
-	return &UserService{repo: repo}
+func NewUserService(auth domain.UserRepository, session domain.SessionRepository) *UserService {
+	return &UserService{
+		authRepo:    auth,
+		sessionRepo: session,
+	}
 }
 
 func (s *UserService) Create(ctx context.Context, user *domain.User) (*domain.User, error) {
@@ -19,7 +23,7 @@ func (s *UserService) Create(ctx context.Context, user *domain.User) (*domain.Us
 		return nil, err
 	}
 
-	data, err := s.repo.Create(ctx, user)
+	data, err := s.authRepo.Create(ctx, user)
 	if err != nil {
 		return nil, err
 	}
@@ -27,10 +31,25 @@ func (s *UserService) Create(ctx context.Context, user *domain.User) (*domain.Us
 	return data, nil
 }
 
-func (s *UserService) Login(ctx context.Context, user *domain.User) error {
-	return s.repo.Login(ctx, user)
+func (s *UserService) Login(ctx context.Context, user *domain.User) (*domain.User, error) {
+	data, session, err := s.authRepo.Login(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.sessionRepo.SaveSession(ctx, session); err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
 
-func (s *UserService) Logout(ctx context.Context, session *domain.Session) error {
-	return s.repo.Logout(ctx, session)
+func (s *UserService) Logout(ctx context.Context) error {
+	_ = s.authRepo.Logout(ctx)
+
+	if err := s.sessionRepo.DeleteSession(ctx); err != nil {
+		return err
+	}
+
+	return nil
 }

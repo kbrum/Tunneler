@@ -18,12 +18,7 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	ExpiresIn    int    `json:"expires_in"`
-	UserEmail    string `json:"user_email"`
-}
-
-type LogoutRequest struct {
-	AccessToken string `json:"access_token"`
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }

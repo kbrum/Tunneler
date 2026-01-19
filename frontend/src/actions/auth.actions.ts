@@ -4,7 +4,7 @@ import {
   LogoutUser,
 } from '../../wailsjs/go/adapter/UserController';
 
-export async function loginUser(email: string, password: string) {
+export async function loginUserAction(email: string, password: string) {
   try {
     return await LoginUser({email: email, password: password});
   } catch (error) {
@@ -14,7 +14,7 @@ export async function loginUser(email: string, password: string) {
 }
 
 // prettier-ignore
-export async function createUser( email: string, password: string,name: string,) {
+export async function createUserAction(email: string, password: string,name: string,) {
   try {
     return await CreateUser({email: email, password: password, name: name});
   } catch (error) {
@@ -23,9 +23,9 @@ export async function createUser( email: string, password: string,name: string,)
   }
 }
 
-export async function logoutUser(accessToken: string) {
+export async function logoutUserAction() {
   try {
-    return await LogoutUser({access_token: accessToken});
+    return await LogoutUser();
   } catch (error) {
     console.error('Logout Error', error);
     throw error;

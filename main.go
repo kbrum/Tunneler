@@ -22,19 +22,26 @@ func main() {
 		log.Println("No .env file found")
 	}
 
+	db, err := infra.NewSQLiteConnection("tunneler.db")
+	if err != nil {
+		log.Fatal("Error creating SQLite connection:", err)
+	}
+	defer db.Close()
+
 	client, err := infra.CreateSupabaseClient()
 	if err != nil {
 		log.Fatal("Error creating supabase client:", err)
 	}
 
+	sessionRepository := infra.NewSqliteSessionRepository(db)
 	userRepository := infra.NewSupabaseUserRepository(client)
-	userService := service.NewUserService(userRepository)
+
+	userService := service.NewUserService(userRepository, sessionRepository)
+
 	userController := adapter.NewUserController(userService)
 
-	// Create an instance of the app structure
 	app := NewApp(userController)
 
-	// Create application with options
 	err = wails.Run(&options.App{
 		Title:  "tunneler",
 		Width:  1024,
@@ -46,10 +53,10 @@ func main() {
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
-			userController,
+			userController, // Agora o Wails vincula o controller com o service completo
 		},
 	})
 	if err != nil {
-		println("Error:", err.Error())
+		log.Fatal("Error:", err.Error())
 	}
 }

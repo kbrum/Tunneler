@@ -13,7 +13,7 @@ import {Link} from 'react-router-dom';
 import {
   registerSchema,
   type RegisterSchema,
-} from '@/features/auth/types/auth-types';
+} from '@/features/auth/types/auth-schemas';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem} from '@/components/ui/form';
 import {NameInput} from '@/components/NameInput';

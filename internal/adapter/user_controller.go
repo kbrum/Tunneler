@@ -42,23 +42,24 @@ func (c *UserController) CreateUser(req dto.CreateUserRequest) (*dto.CreateUserR
 	}, nil
 }
 
-func (c *UserController) LoginUser(req dto.LoginRequest) error {
+func (c *UserController) LoginUser(req dto.LoginRequest) (*dto.LoginResponse, error) {
 	user := &domain.User{
 		Email:    req.Email,
 		Password: req.Password,
 	}
 
-	err := c.userService.Login(c.ctx, user)
+	data, err := c.userService.Login(c.ctx, user)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &dto.LoginResponse{
+		ID:    data.ID,
+		Name:  data.Name,
+		Email: data.Email,
+	}, nil
 }
 
-func (c *UserController) LogoutUser(req dto.LogoutRequest) error {
-	session := &domain.Session{
-		AccessToken: req.AccessToken,
-	}
-	return c.userService.Logout(c.ctx, session)
+func (c *UserController) LogoutUser() error {
+	return c.userService.Logout(c.ctx)
 }

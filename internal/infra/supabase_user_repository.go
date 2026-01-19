@@ -10,8 +10,7 @@ import (
 )
 
 type SupabaseUserRepository struct {
-	session *domain.Session
-	client  *supabase.Client
+	client *supabase.Client
 }
 
 func NewSupabaseUserRepository(client *supabase.Client) *SupabaseUserRepository {
@@ -39,17 +38,35 @@ func (s *SupabaseUserRepository) Create(ctx context.Context, user *domain.User) 
 		Name:  data.User.UserMetadata["name"].(string),
 		Email: data.User.Email,
 	}
-
 	return res, nil
 }
 
-func (s *SupabaseUserRepository) Login(ctx context.Context, user *domain.User) error {
-	_, err := s.client.Auth.SignInWithEmailPassword(user.Email, user.Password)
+func (s *SupabaseUserRepository) Login(ctx context.Context, user *domain.User) (*domain.User, *domain.Session, error) {
+	data, err := s.client.Auth.SignInWithEmailPassword(user.Email, user.Password)
 	if err != nil {
-		return err
+		return nil, nil, err
 	}
 
-	return nil
+	sessionResponse := &domain.Session{
+		AccessToken:  data.Session.AccessToken,
+		RefreshToken: data.Session.RefreshToken,
+		TokenType:    data.Session.TokenType,
+		ExpiresIn:    data.Session.ExpiresIn,
+		ExpiresAt:    data.Session.ExpiresAt,
+		User: domain.User{
+			ID:    data.User.ID.String(),
+			Name:  data.User.UserMetadata["name"].(string),
+			Email: data.User.Email,
+		},
+	}
+
+	userResponse := &domain.User{
+		ID:    data.User.ID.String(),
+		Name:  data.User.UserMetadata["name"].(string),
+		Email: data.User.Email,
+	}
+
+	return userResponse, sessionResponse, nil
 }
 
 func (s *SupabaseUserRepository) LoginGoogleProvider(ctx context.Context, user *domain.User) (*domain.Session, error) {
@@ -64,7 +81,7 @@ func (s *SupabaseUserRepository) IsAuthenticated(ctx context.Context) (bool, err
 	return false, nil
 }
 
-func (s *SupabaseUserRepository) Logout(ctx context.Context, session *domain.Session) error {
+func (s *SupabaseUserRepository) Logout(ctx context.Context) error {
 	err := s.client.Auth.Logout()
 	if err != nil {
 		return err
@@ -73,30 +90,18 @@ func (s *SupabaseUserRepository) Logout(ctx context.Context, session *domain.Ses
 	return nil
 }
 
-func (s *SupabaseUserRepository) GetSession(ctx context.Context, user *domain.User) (*domain.Session, error) {
-	return nil, nil
-}
-
-func (s *SupabaseUserRepository) GetUser(ctx context.Context, session *domain.Session) (*domain.User, error) {
-	return &domain.User{}, nil
-}
-
-func (s *SupabaseUserRepository) UpdateName(ctx context.Context, session *domain.Session) error {
+func (s *SupabaseUserRepository) UpdateName(ctx context.Context, newName string) error {
 	return nil
 }
 
-func (s *SupabaseUserRepository) UpdateEmail(ctx context.Context, session *domain.Session) error {
+func (s *SupabaseUserRepository) UpdateEmail(ctx context.Context, newEmail string) error {
 	return nil
 }
 
-func (s *SupabaseUserRepository) UpdatePassword(ctx context.Context, session *domain.Session) error {
+func (s *SupabaseUserRepository) UpdatePassword(ctx context.Context, newPassword string) error {
 	return nil
 }
 
-func (s *SupabaseUserRepository) UpdateUsername(ctx context.Context, session *domain.Session) error {
-	return nil
-}
-
-func (s *SupabaseUserRepository) Delete(ctx context.Context, session *domain.Session) error {
+func (s *SupabaseUserRepository) Delete(ctx context.Context) error {
 	return nil
 }

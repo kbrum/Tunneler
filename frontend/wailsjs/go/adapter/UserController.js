@@ -10,8 +10,8 @@ export function LoginUser(arg1) {
   return window['go']['adapter']['UserController']['LoginUser'](arg1);
 }
 
-export function LogoutUser(arg1) {
-  return window['go']['adapter']['UserController']['LogoutUser'](arg1);
+export function LogoutUser() {
+  return window['go']['adapter']['UserController']['LogoutUser']();
 }
 
 export function Startup(arg1) {

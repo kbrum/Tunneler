@@ -45,16 +45,20 @@ export namespace dto {
       this.password = source['password'];
     }
   }
-  export class LogoutRequest {
-    access_token: string;
+  export class LoginResponse {
+    id: string;
+    name: string;
+    email: string;
 
     static createFrom(source: any = {}) {
-      return new LogoutRequest(source);
+      return new LoginResponse(source);
     }
 
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
-      this.access_token = source['access_token'];
+      this.id = source['id'];
+      this.name = source['name'];
+      this.email = source['email'];
     }
   }
 }

@@ -14,7 +14,10 @@ import {PasswordInput} from '@/components/PasswordInput';
 import {EmailInput} from '@/components/EmailInput';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {type LoginSchema, loginSchema} from '@/features/auth/types/auth-types';
+import {
+  type LoginSchema,
+  loginSchema,
+} from '@/features/auth/types/auth-schemas';
 
 export function SignIn() {
   const form = useForm<LoginSchema>({
