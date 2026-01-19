@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"tunneler/internal/domain"
-	"tunneler/internal/dto"
 )
 
 type UserService struct {
@@ -15,37 +14,21 @@ func NewUserService(repo domain.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (s *UserService) Create(ctx context.Context, req dto.CreateUserRequest) error {
-	user := &domain.User{
-		Name:     req.Name,
-		Email:    req.Email,
-		Password: req.Password,
-	}
-
+func (s *UserService) Create(ctx context.Context, user *domain.User) (*domain.User, error) {
 	if err := domain.Validate(user); err != nil {
-		return err
+		return nil, err
 	}
 
-	return s.repo.Create(ctx, user)
-}
-
-func (s *UserService) Login(ctx context.Context, req dto.LoginRequest) (*dto.SessionResponse, error) {
-	user := &domain.User{
-		Email:    req.Email,
-		Password: req.Password,
-	}
-
-	session, err := s.repo.Login(ctx, user)
+	data, err := s.repo.Create(ctx, user)
 	if err != nil {
 		return nil, err
 	}
 
-	return &dto.SessionResponse{
-		AccessToken:  session.AccessToken,
-		RefreshToken: session.RefreshToken,
-		ExpiresIn:    session.ExpiresIn,
-		UserEmail:    session.User.Email,
-	}, nil
+	return data, nil
+}
+
+func (s *UserService) Login(ctx context.Context, user *domain.User) error {
+	return s.repo.Login(ctx, user)
 }
 
 func (s *UserService) Logout(ctx context.Context, session *domain.Session) error {

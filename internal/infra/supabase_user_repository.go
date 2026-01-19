@@ -20,7 +20,7 @@ func NewSupabaseUserRepository(client *supabase.Client) *SupabaseUserRepository 
 	}
 }
 
-func (s *SupabaseUserRepository) Create(ctx context.Context, user *domain.User) error {
+func (s *SupabaseUserRepository) Create(ctx context.Context, user *domain.User) (*domain.User, error) {
 	req := types.SignupRequest{
 		Email:    user.Email,
 		Password: user.Password,
@@ -29,30 +29,27 @@ func (s *SupabaseUserRepository) Create(ctx context.Context, user *domain.User) 
 		},
 	}
 
-	_, err := s.client.Auth.Signup(req)
+	data, err := s.client.Auth.Signup(req)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &domain.User{
+		ID:    data.User.ID.String(),
+		Name:  data.User.UserMetadata["name"].(string),
+		Email: data.User.Email,
+	}
+
+	return res, nil
+}
+
+func (s *SupabaseUserRepository) Login(ctx context.Context, user *domain.User) error {
+	_, err := s.client.Auth.SignInWithEmailPassword(user.Email, user.Password)
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func (s *SupabaseUserRepository) Login(ctx context.Context, user *domain.User) (*domain.Session, error) {
-	session, err := s.client.Auth.SignInWithEmailPassword(user.Email, user.Password)
-	if err != nil {
-		return nil, err
-	}
-
-	return &domain.Session{
-		AccessToken:  session.AccessToken,
-		RefreshToken: session.RefreshToken,
-		TokenType:    session.TokenType,
-		ExpiresIn:    session.ExpiresIn,
-		ExpiresAt:    session.ExpiresAt,
-		User: domain.User{
-			Email: session.User.Email,
-		},
-	}, nil
 }
 
 func (s *SupabaseUserRepository) LoginGoogleProvider(ctx context.Context, user *domain.User) (*domain.Session, error) {

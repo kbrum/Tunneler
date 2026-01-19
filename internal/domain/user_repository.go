@@ -3,8 +3,8 @@ package domain
 import "context"
 
 type UserRepository interface {
-	Create(ctx context.Context, user *User) error
-	Login(ctx context.Context, user *User) (*Session, error)
+	Create(ctx context.Context, user *User) (*User, error)
+	Login(ctx context.Context, user *User) error
 	LoginGoogleProvider(ctx context.Context, user *User) (*Session, error)
 	LoginGithubProvider(ctx context.Context, user *User) (*Session, error)
 	Logout(ctx context.Context, session *Session) error

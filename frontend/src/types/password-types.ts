@@ -1,5 +1,3 @@
-import type { ComponentProps } from 'react';
-
-export interface PasswordInputProps extends ComponentProps<'input'> {
+export interface PasswordInputProps {
   tooltip?: boolean;
 }

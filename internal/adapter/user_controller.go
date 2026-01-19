@@ -23,23 +23,37 @@ func (c *UserController) Startup(ctx context.Context) {
 	c.ctx = ctx
 }
 
-func (c *UserController) CreateUser(email, password, name string) error {
-	req := dto.CreateUserRequest{
-		Email:    email,
-		Password: password,
-		Name:     name,
+func (c *UserController) CreateUser(req dto.CreateUserRequest) (*dto.CreateUserResponse, error) {
+	user := &domain.User{
+		Email:    req.Email,
+		Password: req.Password,
+		Name:     req.Name,
 	}
 
-	return c.userService.Create(c.ctx, req)
+	data, err := c.userService.Create(c.ctx, user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.CreateUserResponse{
+		ID:    data.ID,
+		Name:  data.Name,
+		Email: data.Email,
+	}, nil
 }
 
-func (c *UserController) LoginUser(email, password string) (*dto.SessionResponse, error) {
-	req := dto.LoginRequest{
-		Email:    email,
-		Password: password,
+func (c *UserController) LoginUser(req dto.LoginRequest) error {
+	user := &domain.User{
+		Email:    req.Email,
+		Password: req.Password,
 	}
 
-	return c.userService.Login(c.ctx, req)
+	err := c.userService.Login(c.ctx, user)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (c *UserController) LogoutUser(req dto.LogoutRequest) error {
