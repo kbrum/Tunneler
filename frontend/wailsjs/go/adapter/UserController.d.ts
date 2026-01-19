@@ -4,15 +4,10 @@ import {dto} from '../models';
 import {context} from '../models';
 
 export function CreateUser(
-  arg1: string,
-  arg2: string,
-  arg3: string,
-): Promise<void>;
+  arg1: dto.CreateUserRequest,
+): Promise<dto.CreateUserResponse>;
 
-export function LoginUser(
-  arg1: string,
-  arg2: string,
-): Promise<dto.SessionResponse>;
+export function LoginUser(arg1: dto.LoginRequest): Promise<void>;
 
 export function LogoutUser(arg1: dto.LogoutRequest): Promise<void>;
 
