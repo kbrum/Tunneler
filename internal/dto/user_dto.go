@@ -22,3 +22,9 @@ type LoginResponse struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
+
+type AuthStatusResponse struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+	Auth  bool   `json:"auth"`
+}

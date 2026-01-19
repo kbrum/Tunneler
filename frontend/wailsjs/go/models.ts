@@ -1,4 +1,20 @@
 export namespace dto {
+  export class AuthStatusResponse {
+    id: string;
+    email: string;
+    auth: boolean;
+
+    static createFrom(source: any = {}) {
+      return new AuthStatusResponse(source);
+    }
+
+    constructor(source: any = {}) {
+      if ('string' === typeof source) source = JSON.parse(source);
+      this.id = source['id'];
+      this.email = source['email'];
+      this.auth = source['auth'];
+    }
+  }
   export class CreateUserRequest {
     name: string;
     email: string;

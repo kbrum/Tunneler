@@ -63,3 +63,20 @@ func (c *UserController) LoginUser(req dto.LoginRequest) (*dto.LoginResponse, er
 func (c *UserController) LogoutUser() error {
 	return c.userService.Logout(c.ctx)
 }
+
+func (c *UserController) GetUser() (*dto.AuthStatusResponse, error) {
+	session, err := c.userService.GetUser(c.ctx)
+	if err != nil {
+		return &dto.AuthStatusResponse{
+			ID:    "",
+			Email: "",
+			Auth:  false,
+		}, err
+	}
+
+	return &dto.AuthStatusResponse{
+		ID:    session.User.ID,
+		Email: session.User.Email,
+		Auth:  true,
+	}, nil
+}

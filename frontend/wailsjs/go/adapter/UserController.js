@@ -6,6 +6,10 @@ export function CreateUser(arg1) {
   return window['go']['adapter']['UserController']['CreateUser'](arg1);
 }
 
+export function GetUser() {
+  return window['go']['adapter']['UserController']['GetUser']();
+}
+
 export function LoginUser(arg1) {
   return window['go']['adapter']['UserController']['LoginUser'](arg1);
 }

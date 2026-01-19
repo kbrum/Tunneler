@@ -7,6 +7,8 @@ export function CreateUser(
   arg1: dto.CreateUserRequest,
 ): Promise<dto.CreateUserResponse>;
 
+export function GetUser(): Promise<dto.AuthStatusResponse>;
+
 export function LoginUser(arg1: dto.LoginRequest): Promise<dto.LoginResponse>;
 
 export function LogoutUser(): Promise<void>;

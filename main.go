@@ -28,7 +28,7 @@ func main() {
 	}
 	defer db.Close()
 
-	client, err := infra.CreateSupabaseClient()
+	client, err := infra.NewSupabaseClient()
 	if err != nil {
 		log.Fatal("Error creating supabase client:", err)
 	}

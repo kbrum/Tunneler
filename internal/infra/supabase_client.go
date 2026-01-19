@@ -7,7 +7,7 @@ import (
 	"github.com/supabase-community/supabase-go"
 )
 
-func CreateSupabaseClient() (*supabase.Client, error) {
+func NewSupabaseClient() (*supabase.Client, error) {
 	client, err := supabase.NewClient(os.Getenv("SUPABASE_URL"), os.Getenv("PUBLIC_SUPABASE_KEY"), &supabase.ClientOptions{})
 	if err != nil {
 		log.Fatal(err)
