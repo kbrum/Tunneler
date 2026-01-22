@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {FcGoogle} from 'react-icons/fc';
 import {Button} from '@/components/ui/button';
 import {FaGithub} from 'react-icons/fa';
@@ -18,8 +18,14 @@ import {
   type LoginSchema,
   loginSchema,
 } from '@/features/auth/types/auth-schemas';
+import {useLogin} from '@/features/auth/hooks/use-auth';
+import {toast} from 'sonner';
+import {Spinner} from '@/components/ui/spinner';
 
 export function SignIn() {
+  const {login, isLoadingLogin} = useLogin();
+  const navigate = useNavigate();
+
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -27,6 +33,15 @@ export function SignIn() {
       password: '',
     },
   });
+
+  const handleLogin = async (data: LoginSchema) => {
+    try {
+      await login(data);
+      navigate('/');
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  };
 
   return (
     <div className="flex h-screen items-center justify-center bg-[#09090b]">
@@ -39,7 +54,10 @@ export function SignIn() {
 
         <CardContent className="flex flex-col items-center justify-center gap-4 pt-0 pb-3">
           <Form {...form}>
-            <form className="flex h-full w-full flex-col gap-4">
+            <form
+              onSubmit={form.handleSubmit(handleLogin)}
+              className="flex h-full w-full flex-col gap-4"
+            >
               <FormField
                 control={form.control}
                 name="email"
@@ -78,8 +96,9 @@ export function SignIn() {
               <Button
                 type="submit"
                 className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]"
+                disabled={isLoadingLogin}
               >
-                Sign In
+                {isLoadingLogin ? <Spinner /> : <span>Sign In</span>}
               </Button>
             </form>
           </Form>

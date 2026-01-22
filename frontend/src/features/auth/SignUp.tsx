@@ -89,7 +89,7 @@ export function SignUp() {
                   <FormItem>
                     <FormControl>
                       <PasswordInput
-                        placeholder="Enter your password"
+                        placeholder="Confirm your password"
                         {...field}
                       />
                     </FormControl>
