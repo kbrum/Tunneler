@@ -31,6 +31,7 @@ export function SignUp() {
     try {
       await register(data);
       navigate('/login');
+      toast.success('Registration successful!');
     } catch (error) {
       console.log(error);
       toast.error(`Error on register`);

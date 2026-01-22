@@ -6,6 +6,7 @@ import {Dashboard} from '@/features/dashboard/Dashboard';
 import {Toaster} from '@/components/ui/sonner';
 import {RequireAuth} from '@/features/auth/components/RequireAuth';
 import {ForgotPassword} from '@/features/auth/components/ForgotPasswrod';
+import {DashboardLayout} from '@/features/dashboard/DashboardLayout';
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
       <Router>
         <Routes>
           <Route element={<RequireAuth />}>
-            <Route path="/" element={<Dashboard />} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/" element={<Dashboard />} />
+            </Route>
           </Route>
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
