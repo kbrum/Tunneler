@@ -10,7 +10,7 @@ import {Link} from 'react-router-dom';
 import {
   resetPasswordSchema,
   type ResetPasswordSchema,
-} from './types/auth-schemas';
+} from '@/features/auth/types/auth-schemas';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {EmailInput} from '@/components/EmailInput';
 import {FormControl, FormField, FormItem} from '@/components/ui/form';
@@ -62,7 +62,7 @@ export function ForgotPassword() {
 
           <Link
             className="text-sm font-medium text-[#fafafa] hover:font-semibold hover:text-[#ffffff] hover:underline"
-            to="/signin"
+            to="/login"
           >
             Back to Login
           </Link>

@@ -2,6 +2,7 @@ import {
   LoginUser,
   CreateUser,
   LogoutUser,
+  GetUser,
 } from '../../wailsjs/go/adapter/UserController';
 
 export async function loginUserAction(email: string, password: string) {
@@ -28,6 +29,19 @@ export async function logoutUserAction() {
     return await LogoutUser();
   } catch (error) {
     console.error('Logout Error', error);
+    throw error;
+  }
+}
+
+export async function getSessionAction() {
+  try {
+    const session = await GetUser();
+    if (session.auth) {
+      return session;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error getting session:', error);
     throw error;
   }
 }

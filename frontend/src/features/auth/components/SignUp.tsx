@@ -9,7 +9,7 @@ import {
 import {useForm} from 'react-hook-form';
 import {FaGithub} from 'react-icons/fa';
 import {FcGoogle} from 'react-icons/fc';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {
   registerSchema,
   type RegisterSchema,
@@ -19,8 +19,24 @@ import {Form, FormControl, FormField, FormItem} from '@/components/ui/form';
 import {NameInput} from '@/components/NameInput';
 import {EmailInput} from '@/components/EmailInput';
 import {PasswordInput} from '@/components/PasswordInput';
+import {useRegister} from '@/features/auth/hooks/use-auth';
+import {toast} from 'sonner';
+import {Spinner} from '@/components/ui/spinner';
 
 export function SignUp() {
+  const {register, isLoadingRegister} = useRegister();
+  const navigate = useNavigate();
+
+  const handleRegister = async (data: RegisterSchema) => {
+    try {
+      await register(data);
+      navigate('/login');
+    } catch (error) {
+      console.log(error);
+      toast.error(`Error on register`);
+    }
+  };
+
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -42,7 +58,10 @@ export function SignUp() {
 
         <CardContent className="flex flex-col items-center justify-center gap-4 pt-0 pb-0">
           <Form {...form}>
-            <form className="flex h-full w-full flex-col gap-4">
+            <form
+              onSubmit={form.handleSubmit(handleRegister)}
+              className="flex h-full w-full flex-col gap-4"
+            >
               <FormField
                 control={form.control}
                 name="name"
@@ -97,8 +116,12 @@ export function SignUp() {
                 )}
               />
 
-              <Button className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]">
-                Sign In
+              <Button
+                type="submit"
+                className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]"
+                disabled={isLoadingRegister}
+              >
+                {isLoadingRegister ? <Spinner /> : <span>Sign Up</span>}
               </Button>
             </form>
           </Form>
@@ -122,7 +145,7 @@ export function SignUp() {
             Already have an account?{' '}
             <Link
               className="text-sm font-semibold text-[#fafafa] hover:font-semibold hover:text-[#ffffff] hover:underline"
-              to="/signin"
+              to="/login"
             >
               Sign In
             </Link>

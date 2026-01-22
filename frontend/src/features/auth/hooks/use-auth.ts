@@ -1,8 +1,4 @@
-import {
-  createUserAction,
-  loginUserAction,
-  logoutUserAction,
-} from '@/actions/auth.actions';
+import {createUserAction, loginUserAction} from '@/actions/auth.actions';
 import {useMutation} from '@tanstack/react-query';
 
 export function useLogin() {
@@ -28,17 +24,5 @@ export function useRegister() {
     register: register.mutateAsync,
     isLoadingRegister: register.isPending,
     error: register.error,
-  };
-}
-
-export function useLogout() {
-  const logout = useMutation({
-    mutationFn: () => logoutUserAction(),
-  });
-
-  return {
-    logout: logout.mutateAsync,
-    isLoadingLogout: logout.isPending,
-    error: logout.error,
   };
 }

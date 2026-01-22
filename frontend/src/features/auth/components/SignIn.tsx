@@ -26,6 +26,16 @@ export function SignIn() {
   const {login, isLoadingLogin} = useLogin();
   const navigate = useNavigate();
 
+  const handleLogin = async (data: LoginSchema) => {
+    try {
+      await login(data);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+      toast.error('Error on login');
+    }
+  };
+
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -33,15 +43,6 @@ export function SignIn() {
       password: '',
     },
   });
-
-  const handleLogin = async (data: LoginSchema) => {
-    try {
-      await login(data);
-      navigate('/');
-    } catch (error) {
-      toast.error(`${error}`);
-    }
-  };
 
   return (
     <div className="flex h-screen items-center justify-center bg-[#09090b]">
@@ -122,7 +123,7 @@ export function SignIn() {
             Don&apos;t have an account?{' '}
             <Link
               className="text-sm font-semibold text-[#fafafa] hover:font-semibold hover:text-[#ffffff] hover:underline"
-              to="/signup"
+              to="/register"
             >
               Sign Up
             </Link>

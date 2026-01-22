@@ -68,10 +68,14 @@ func (c *UserController) GetUser() (*dto.AuthStatusResponse, error) {
 	session, err := c.userService.GetUser(c.ctx)
 	if err != nil {
 		return &dto.AuthStatusResponse{
-			ID:    "",
-			Email: "",
-			Auth:  false,
+			Auth: false,
 		}, err
+	}
+
+	if session == nil {
+		return &dto.AuthStatusResponse{
+			Auth: false,
+		}, nil
 	}
 
 	return &dto.AuthStatusResponse{
