@@ -41,7 +41,7 @@ func main() {
 
 	err = wails.Run(&options.App{
 		Title:  "tunneler",
-		Width:  1024,
+		Width:  1280,
 		Height: 768,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
@@ -50,7 +50,7 @@ func main() {
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
-			userController, // Agora o Wails vincula o controller com o service completo
+			userController,
 		},
 	})
 	if err != nil {

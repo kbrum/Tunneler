@@ -2,11 +2,11 @@ import {SignIn} from '@/features/auth/components/SignIn';
 import {Route, HashRouter as Router, Routes} from 'react-router-dom';
 import {TooltipProvider} from '@/components/ui/tooltip';
 import {SignUp} from '@/features/auth/components/SignUp';
-import {Dashboard} from '@/features/dashboard/Dashboard';
+import {Dashboard} from '@/features/dashboard/components/Dashboard';
 import {Toaster} from '@/components/ui/sonner';
 import {RequireAuth} from '@/features/auth/components/RequireAuth';
 import {ForgotPassword} from '@/features/auth/components/ForgotPasswrod';
-import {DashboardLayout} from '@/features/dashboard/DashboardLayout';
+import {DashboardLayout} from '@/features/dashboard/components/DashboardLayout';
 
 function App() {
   return (
