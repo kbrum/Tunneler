@@ -20,7 +20,9 @@ export function TunnelerSidebar() {
       <Separator className="group-data-[collapsible=icon]:hidden" />
       <SidebarContent></SidebarContent>
       <SidebarFooter>
-        <SettingsMenu />
+        <div>
+          <SettingsMenu />
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
