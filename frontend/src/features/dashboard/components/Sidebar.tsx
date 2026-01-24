@@ -1,4 +1,3 @@
-import {Separator} from '@/components/ui/separator';
 import {
   Sidebar,
   SidebarContent,
@@ -17,12 +16,9 @@ export function TunnelerSidebar() {
         </span>
         <SidebarTrigger className="text-white" />
       </SidebarHeader>
-      <Separator className="group-data-[collapsible=icon]:hidden" />
       <SidebarContent></SidebarContent>
       <SidebarFooter>
-        <div>
-          <SettingsMenu />
-        </div>
+        <SettingsMenu />
       </SidebarFooter>
     </Sidebar>
   );
