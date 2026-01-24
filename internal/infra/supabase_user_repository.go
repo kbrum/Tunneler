@@ -77,10 +77,6 @@ func (s *SupabaseUserRepository) LoginGithubProvider(ctx context.Context, user *
 	return nil, nil
 }
 
-func (s *SupabaseUserRepository) IsAuthenticated(ctx context.Context) (bool, error) {
-	return false, nil
-}
-
 func (s *SupabaseUserRepository) Logout(ctx context.Context) error {
 	err := s.client.Auth.Logout()
 	if err != nil {
@@ -90,15 +86,7 @@ func (s *SupabaseUserRepository) Logout(ctx context.Context) error {
 	return nil
 }
 
-func (s *SupabaseUserRepository) UpdateName(ctx context.Context, newName string) error {
-	return nil
-}
-
-func (s *SupabaseUserRepository) UpdateEmail(ctx context.Context, newEmail string) error {
-	return nil
-}
-
-func (s *SupabaseUserRepository) UpdatePassword(ctx context.Context, newPassword string) error {
+func (s *SupabaseUserRepository) UpdateUser(ctx context.Context, user *domain.User) error {
 	return nil
 }
 

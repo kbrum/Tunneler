@@ -1,29 +1,29 @@
 package dto
 
-type CreateUserRequest struct {
+type CreateUserRequestDTO struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-type CreateUserResponse struct {
+type CreateUserResponseDTO struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
 
-type LoginRequest struct {
+type LoginRequestDTO struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-type LoginResponse struct {
+type LoginResponseDTO struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
 
-type AuthStatusResponse struct {
+type AuthStatusResponseDTO struct {
 	ID    string `json:"id"`
 	Email string `json:"email"`
 	Auth  bool   `json:"auth"`

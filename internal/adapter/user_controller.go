@@ -23,7 +23,7 @@ func (c *UserController) Startup(ctx context.Context) {
 	c.ctx = ctx
 }
 
-func (c *UserController) CreateUser(req dto.CreateUserRequest) (*dto.CreateUserResponse, error) {
+func (c *UserController) CreateUser(req dto.CreateUserRequestDTO) (*dto.CreateUserResponseDTO, error) {
 	user := &domain.User{
 		Email:    req.Email,
 		Password: req.Password,
@@ -35,14 +35,14 @@ func (c *UserController) CreateUser(req dto.CreateUserRequest) (*dto.CreateUserR
 		return nil, err
 	}
 
-	return &dto.CreateUserResponse{
+	return &dto.CreateUserResponseDTO{
 		ID:    data.ID,
 		Name:  data.Name,
 		Email: data.Email,
 	}, nil
 }
 
-func (c *UserController) LoginUser(req dto.LoginRequest) (*dto.LoginResponse, error) {
+func (c *UserController) LoginUser(req dto.LoginRequestDTO) (*dto.LoginResponseDTO, error) {
 	user := &domain.User{
 		Email:    req.Email,
 		Password: req.Password,
@@ -53,7 +53,7 @@ func (c *UserController) LoginUser(req dto.LoginRequest) (*dto.LoginResponse, er
 		return nil, err
 	}
 
-	return &dto.LoginResponse{
+	return &dto.LoginResponseDTO{
 		ID:    data.ID,
 		Name:  data.Name,
 		Email: data.Email,
@@ -64,21 +64,21 @@ func (c *UserController) LogoutUser() error {
 	return c.userService.Logout(c.ctx)
 }
 
-func (c *UserController) GetUser() (*dto.AuthStatusResponse, error) {
+func (c *UserController) GetUser() (*dto.AuthStatusResponseDTO, error) {
 	session, err := c.userService.GetUser(c.ctx)
 	if err != nil {
-		return &dto.AuthStatusResponse{
+		return &dto.AuthStatusResponseDTO{
 			Auth: false,
 		}, err
 	}
 
 	if session == nil {
-		return &dto.AuthStatusResponse{
+		return &dto.AuthStatusResponseDTO{
 			Auth: false,
 		}, nil
 	}
 
-	return &dto.AuthStatusResponse{
+	return &dto.AuthStatusResponseDTO{
 		ID:    session.User.ID,
 		Email: session.User.Email,
 		Auth:  true,
