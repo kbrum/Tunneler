@@ -34,6 +34,9 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 	_, err := r.client.From("ssh_sessions").
 		Insert(SSHSessionDB, false, "", "representation", "none").
 		ExecuteTo(&data)
+
+	res := &domain.SSHSession{}
+
 	if err != nil {
 		return nil, err
 	}

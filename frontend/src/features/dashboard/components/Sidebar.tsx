@@ -18,7 +18,9 @@ export function TunnelerSidebar() {
       </SidebarHeader>
       <SidebarContent></SidebarContent>
       <SidebarFooter>
-        <SettingsMenu />
+        <div className="flex flex-row items-center justify-between">
+          <SettingsMenu />
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
