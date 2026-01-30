@@ -18,9 +18,39 @@ func NewSupabaseSSHSessionRepository(client *supabase.Client) *SupabaseSSHSessio
 	}
 }
 
-func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession) error {
-	// Implementation here
-	return nil
+func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
+	SSHSessionDB := SSHSessionSchema{
+		Name: sshSession.SSHSessionName,
+		IP:   sshSession.SSHSessionIP,
+		Port: sshSession.SSHSessionPort,
+		UserID: sshSession.UserID,
+		KeyID: sshSession.KeyID,
+		Folder: sshSession.FolderID,
+		Tags: sshSession.Tags,
+	}
+
+	var data []SSHSessionSchema
+
+	req, _, err := r.client.From("ssh_sessions").
+		Insert(SSHSessionDB, false, "", "representation", "none").
+		ExecuteTo(&data)
+
+	res := &domain.SSHSession{
+		ID: req.ID,
+		SSHSessionName: sshSession.SSHSessionName,
+		SSHSessionIP: sshSession.SSHSessionIP,
+		SSHSessionPort: sshSession.SSHSessionPort,
+		UserID: sshSession.UserID,
+		KeyID: sshSession.KeyID,
+		FolderID: sshSession.FolderID,
+		Tags: sshSession.Tags,
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }
 
 func (r *SupabaseSSHSessionRepository) GetSSHSession(ctx context.Context, sessionID string) ([]*domain.SSHSession, error) {
@@ -33,12 +63,12 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessionTags(ctx context.Context, us
 	return nil, nil
 }
 
-func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, sshSession *domain.SSHSession) error {
+func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
 	// Implementation here
-	return nil
+	return nil, nil
 }
 
-func (r *SupabaseSSHSessionRepository) DeleteSSHSession(ctx context.Context, sessionID string) error {
+func (r *SupabaseSSHSessionRepository) DeleteSSHSession(ctx context.Context, sessionID string) (bool, error) {
 	// Implementation here
-	return nil
+	return false, nil
 }
