@@ -1,10 +1,15 @@
 import {createUserAction, loginUserAction} from '@/actions/auth.actions';
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 export function useLogin() {
+  const queryClient = useQueryClient();
+
   const login = useMutation({
     mutationFn: (props: {email: string; password: string}) =>
       loginUserAction(props.email, props.password),
+    onSuccess: async () => {
+      await queryClient.resetQueries({queryKey: ['session']});
+    },
   });
 
   return {
@@ -15,9 +20,14 @@ export function useLogin() {
 }
 
 export function useRegister() {
+  const queryClient = useQueryClient();
+
   const register = useMutation({
     mutationFn: (props: {email: string; password: string; name: string}) =>
       createUserAction(props.email, props.password, props.name),
+    onSuccess: async () => {
+      await queryClient.resetQueries({queryKey: ['session']});
+    },
   });
 
   return {

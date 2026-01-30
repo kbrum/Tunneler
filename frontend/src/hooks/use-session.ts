@@ -1,5 +1,5 @@
 import {getSessionAction, logoutUserAction} from '@/actions/auth.actions';
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 export function useSession() {
   const {
@@ -22,8 +22,14 @@ export function useSession() {
 }
 
 export function useLogout() {
+  const queryClient = useQueryClient();
+
   const logout = useMutation({
     mutationFn: () => logoutUserAction(),
+    onSuccess: async () => {
+      await queryClient.setQueryData(['session'], null);
+      await queryClient.resetQueries({queryKey: ['session']});
+    },
   });
 
   return {
