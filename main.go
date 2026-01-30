@@ -33,11 +33,10 @@ func main() {
 		log.Fatal("Error creating supabase client:", err)
 	}
 
-	sessionRepository := infra.NewSqliteSessionRepository(db)
-	userRepository := infra.NewSupabaseUserRepository(client)
-	userService := service.NewUserService(userRepository, sessionRepository)
-	userController := adapter.NewUserController(userService)
-	app := NewApp(userController)
+	infraManager := infra.NewInfraManager(db, client)
+	serviceManager := service.NewServiceManager(infraManager)
+	controllerManager := adapter.NewControllerManager(serviceManager)
+	app := NewApp(controllerManager)
 
 	err = wails.Run(&options.App{
 		Title:  "tunneler",
@@ -48,10 +47,7 @@ func main() {
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        app.startup,
-		Bind: []interface{}{
-			app,
-			userController,
-		},
+		Bind:             append([]interface{}{app}, controllerManager.GetAll()...),
 	})
 	if err != nil {
 		log.Fatal("Error:", err.Error())

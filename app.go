@@ -7,17 +7,17 @@ import (
 )
 
 type App struct {
-	ctx            context.Context
-	userController *adapter.UserController
+	ctx     context.Context
+	manager *adapter.ControllerManager
 }
 
-func NewApp(userController *adapter.UserController) *App {
+func NewApp(manager *adapter.ControllerManager) *App {
 	return &App{
-		userController: userController,
+		manager: manager,
 	}
 }
 
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	a.userController.Startup(ctx)
+	a.manager.StartupAll(ctx)
 }
