@@ -16,8 +16,8 @@ func NewControllerManager(serviceManager *service.ServiceManager) *ControllerMan
 	}
 }
 
-func (cm *ControllerManager) GetAll() []interface{} {
-	return []interface{}{
+func (cm *ControllerManager) GetAll() []interface{ any } {
+	return []interface{ any }{
 		cm.UserController,
 	}
 }
