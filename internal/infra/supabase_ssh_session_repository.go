@@ -20,32 +20,20 @@ func NewSupabaseSSHSessionRepository(client *supabase.Client) *SupabaseSSHSessio
 
 func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
 	SSHSessionDB := SSHSessionSchema{
-		Name: sshSession.SSHSessionName,
-		IP:   sshSession.SSHSessionIP,
-		Port: sshSession.SSHSessionPort,
+		Name:   sshSession.SSHSessionName,
+		IP:     sshSession.SSHSessionIP,
+		Port:   sshSession.SSHSessionPort,
 		UserID: sshSession.UserID,
-		KeyID: sshSession.KeyID,
+		KeyID:  sshSession.KeyID,
 		Folder: sshSession.FolderID,
-		Tags: sshSession.Tags,
+		Tags:   sshSession.Tags,
 	}
 
 	var data []SSHSessionSchema
 
-	req, _, err := r.client.From("ssh_sessions").
+	_, err := r.client.From("ssh_sessions").
 		Insert(SSHSessionDB, false, "", "representation", "none").
 		ExecuteTo(&data)
-
-	res := &domain.SSHSession{
-		ID: req.ID,
-		SSHSessionName: sshSession.SSHSessionName,
-		SSHSessionIP: sshSession.SSHSessionIP,
-		SSHSessionPort: sshSession.SSHSessionPort,
-		UserID: sshSession.UserID,
-		KeyID: sshSession.KeyID,
-		FolderID: sshSession.FolderID,
-		Tags: sshSession.Tags,
-	}
-
 	if err != nil {
 		return nil, err
 	}
