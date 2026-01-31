@@ -34,14 +34,21 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 	_, err := r.client.From("ssh_sessions").
 		Insert(SSHSessionDB, false, "", "representation", "none").
 		ExecuteTo(&data)
-
-	res := &domain.SSHSession{}
-
 	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	res := &domain.SSHSession{
+		SSHSessionName: data[0].Name,
+		SSHSessionIP:   data[0].IP,
+		SSHSessionPort: data[0].Port,
+		UserID:         data[0].UserID,
+		KeyID:          data[0].KeyID,
+		FolderID:       data[0].Folder,
+		Tags:           data[0].Tags,
+	}
+
+	return res, nil
 }
 
 func (r *SupabaseSSHSessionRepository) GetSSHSession(ctx context.Context, sessionID string) ([]*domain.SSHSession, error) {
