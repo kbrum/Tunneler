@@ -62,7 +62,7 @@ type SSHSession struct {
 }
 
 type SSHSessionRepository interface {
-	CreateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
+	CreateSSHSession(ctx context.Context, sshSession *SSHSession, userID string, folderID string, keyID string) (*SSHSession, error)
 	GetSSHSessions(ctx context.Context, userID string) ([]*SSHSession, error)
 	UpdateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
 	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)
@@ -97,20 +97,39 @@ func ValidadeUserID(sshSession *SSHSession) error {
 	return nil
 }
 
-func (s Status) IsStatusValid() (bool, error) {
+func (s Status) IsStatusValid() error {
 	switch s {
 	case StatusOffline, StatusActive, StatusPending, StatusClosed, StatusFailed:
-		return true, nil
+		return nil
 	default:
-		return false, ErrInvalidStatus
+		return ErrInvalidStatus
 	}
 }
 
-func (a Auth_type) IsAuthTypeValid() (bool, error) {
+func (a Auth_type) IsAuthTypeValid() error {
 	switch a {
 	case AuthTypePassword, AuthTypeKey, AuthTypeBoth:
-		return true, nil
+		return nil
 	default:
-		return false, ErrInvalidAuthType
+		return ErrInvalidAuthType
 	}
+}
+
+func ValidadeSSHSession(sshSession *SSHSession) error {
+	if err := ValidadeIP(sshSession); err != nil {
+		return err
+	}
+	if err := ValidadePort(sshSession); err != nil {
+		return err
+	}
+	if err := ValidadeUserID(sshSession); err != nil {
+		return err
+	}
+	if err := sshSession.Status.IsStatusValid(); err != nil {
+		return err
+	}
+	if err := sshSession.AuthType.IsAuthTypeValid(); err != nil {
+		return err
+	}
+	return nil
 }

@@ -18,15 +18,15 @@ func NewSupabaseSSHSessionRepository(client *supabase.Client) *SupabaseSSHSessio
 	}
 }
 
-func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
+func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession, userID string, folderID string, keyID string) (*domain.SSHSession, error) {
 	SSHSessionDB := SSHSessionSchema{
 		Name:     sshSession.Name,
 		IP:       sshSession.IP,
 		Port:     sshSession.Port,
 		User:     sshSession.User,
-		UserID:   sshSession.UserID,
-		KeyID:    sshSession.KeyID,
-		FolderID: sshSession.FolderID,
+		UserID:   userID,
+		KeyID:    keyID,
+		FolderID: folderID,
 		Metadata: domain.SSHSessionMetadata{
 			Audit: domain.SSHSessionAudit{
 				LastExitCode: sshSession.Metadata.Audit.LastExitCode,
@@ -47,7 +47,7 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 
 	_, err := r.client.From("ssh_sessions").
 		Insert(SSHSessionDB, false, "", "representation", "estimated").
-		ExecuteTo(&data)
+		ExecuteToWithContext(ctx, &data)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessions(ctx context.Context, userI
 	_, err := r.client.From("ssh_sessions").
 		Select("*", "estimated", false).
 		Eq("user_id", userID).
-		ExecuteTo(&data)
+		ExecuteToWithContext(ctx, &data)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +141,7 @@ func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, ssh
 	_, err := r.client.From("ssh_sessions").
 		Update(SSHSessionDB, "representation", "estimated").
 		Eq("id", sshSession.ID).
-		ExecuteTo(&data)
+		ExecuteToWithContext(ctx, &data)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +163,7 @@ func (r *SupabaseSSHSessionRepository) DeleteSSHSession(ctx context.Context, ses
 	_, _, err := r.client.From("ssh_sessions").
 		Delete("representation", "estimated").
 		Eq("id", sessionID).
-		Execute()
+		ExecuteWithContext(ctx) // Assuming this exists
 	if err != nil {
 		return false, err
 	}
