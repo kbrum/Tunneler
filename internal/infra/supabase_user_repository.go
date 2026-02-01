@@ -41,6 +41,18 @@ func (s *SupabaseUserRepository) Create(ctx context.Context, user *domain.User) 
 	return res, nil
 }
 
+func (s *SupabaseUserRepository) GetUserID(ctx context.Context, token string) (*domain.User, error) {
+	user, err := s.client.Auth.WithToken(token).GetUser()
+	if err != nil {
+		return nil, err
+	}
+
+	res := &domain.User{
+		ID: user.ID.String(),
+	}
+	return res, nil
+}
+
 func (s *SupabaseUserRepository) Login(ctx context.Context, user *domain.User) (*domain.User, *domain.Session, error) {
 	data, err := s.client.Auth.SignInWithEmailPassword(user.Email, user.Password)
 	if err != nil {

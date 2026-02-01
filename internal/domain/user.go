@@ -16,6 +16,7 @@ type User struct {
 
 type UserRepository interface {
 	Create(ctx context.Context, user *User) (*User, error)
+	GetUserID(ctx context.Context, token string) (*User, error)
 	Login(ctx context.Context, user *User) (*User, *Session, error)
 	LoginGoogleProvider(ctx context.Context, user *User) (*Session, error)
 	LoginGithubProvider(ctx context.Context, user *User) (*Session, error)

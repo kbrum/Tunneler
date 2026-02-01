@@ -35,14 +35,6 @@ func createTables(db *sql.DB) error {
 		expires_in INTEGER,
 		expires_at INTEGER,
 		user_id TEXT
-	);
-
-	CREATE TABLE IF NOT EXISTS hosts (
-		id TEXT PRIMARY KEY,
-		name TEXT NOT NULL,
-		address TEXT NOT NULL,
-		user_id TEXT NOT NULL,
-		created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 	);`
 
 	_, err := db.Exec(query)
