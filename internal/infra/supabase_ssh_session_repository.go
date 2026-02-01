@@ -36,10 +36,6 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 				Fingerprint: sshSession.Metadata.Security.Fingerprint,
 				KnownHost:   sshSession.Metadata.Security.KnownHost,
 			},
-			UI: domain.SSHSessionUI{
-				Theme:    sshSession.Metadata.UI.Theme,
-				FontSize: sshSession.Metadata.UI.FontSize,
-			},
 			Inventory: domain.SSHSessionInventory{
 				Distro: sshSession.Metadata.Inventory.Distro,
 				Kernel: sshSession.Metadata.Inventory.Kernel,
@@ -73,10 +69,6 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 			Security: domain.SSHSessionSecurity{
 				Fingerprint: data[0].Metadata.Security.Fingerprint,
 				KnownHost:   data[0].Metadata.Security.KnownHost,
-			},
-			UI: domain.SSHSessionUI{
-				Theme:    data[0].Metadata.UI.Theme,
-				FontSize: data[0].Metadata.UI.FontSize,
 			},
 			Inventory: domain.SSHSessionInventory{
 				Distro: data[0].Metadata.Inventory.Distro,
@@ -121,10 +113,6 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessions(ctx context.Context, userI
 				Security: domain.SSHSessionSecurity{
 					Fingerprint: item.Metadata.Security.Fingerprint,
 					KnownHost:   item.Metadata.Security.KnownHost,
-				},
-				UI: domain.SSHSessionUI{
-					Theme:    item.Metadata.UI.Theme,
-					FontSize: item.Metadata.UI.FontSize,
 				},
 				Inventory: domain.SSHSessionInventory{
 					Distro: item.Metadata.Inventory.Distro,

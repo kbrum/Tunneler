@@ -34,11 +34,6 @@ type SSHSessionSecurity struct {
 	KnownHost   bool   `json:"known_host"`
 }
 
-type SSHSessionUI struct {
-	Theme    string `json:"theme"`
-	FontSize int    `json:"font_size"`
-}
-
 type SSHSessionInventory struct {
 	Distro string `json:"distro"`
 	Kernel string `json:"kernel"`
@@ -47,7 +42,6 @@ type SSHSessionInventory struct {
 type SSHSessionMetadata struct {
 	Audit     SSHSessionAudit     `json:"audit"`
 	Security  SSHSessionSecurity  `json:"security"`
-	UI        SSHSessionUI        `json:"ui"`
 	Inventory SSHSessionInventory `json:"inventory"`
 }
 
