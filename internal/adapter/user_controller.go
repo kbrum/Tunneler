@@ -35,11 +35,13 @@ func (c *UserController) CreateUser(req dto.CreateUserRequestDTO) (*dto.CreateUs
 		return nil, err
 	}
 
-	return &dto.CreateUserResponseDTO{
+	res := &dto.CreateUserResponseDTO{
 		ID:    data.ID,
 		Name:  data.Name,
 		Email: data.Email,
-	}, nil
+	}
+
+	return res, nil
 }
 
 func (c *UserController) LoginUser(req dto.LoginRequestDTO) (*dto.LoginResponseDTO, error) {
@@ -53,11 +55,13 @@ func (c *UserController) LoginUser(req dto.LoginRequestDTO) (*dto.LoginResponseD
 		return nil, err
 	}
 
-	return &dto.LoginResponseDTO{
+	res := &dto.LoginResponseDTO{
 		ID:    data.ID,
 		Name:  data.Name,
 		Email: data.Email,
-	}, nil
+	}
+
+	return res, nil
 }
 
 func (c *UserController) LogoutUser() error {
@@ -78,9 +82,11 @@ func (c *UserController) GetUser() (*dto.AuthStatusResponseDTO, error) {
 		}, nil
 	}
 
-	return &dto.AuthStatusResponseDTO{
+	res := &dto.AuthStatusResponseDTO{
 		ID:    session.User.ID,
 		Email: session.User.Email,
 		Auth:  true,
-	}, nil
+	}
+
+	return res, nil
 }

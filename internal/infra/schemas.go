@@ -14,7 +14,7 @@ type SSHSessionSchema struct {
 	IP        string                    `json:"session_ip"`
 	Port      int                       `json:"ssh_port"`
 	Status    domain.Status             `json:"status"`
-	AuthType  domain.Auth_type          `json:"auth_type"`
+	AuthType  domain.AuthType           `json:"auth_type"`
 	UserID    string                    `json:"user_id"`
 	KeyID     string                    `json:"key_id"`
 	FolderID  string                    `json:"folder_id"`

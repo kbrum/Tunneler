@@ -16,12 +16,12 @@ const (
 	StatusFailed  Status = "failed"
 )
 
-type Auth_type string
+type AuthType string
 
 const (
-	AuthTypePassword Auth_type = "password"
-	AuthTypeKey      Auth_type = "key"
-	AuthTypeBoth     Auth_type = "both"
+	AuthTypePassword AuthType = "password"
+	AuthTypeKey      AuthType = "key"
+	AuthTypeBoth     AuthType = "both"
 )
 
 type SSHSessionAudit struct {
@@ -53,7 +53,7 @@ type SSHSession struct {
 	IP        string
 	Port      int
 	Status    Status
-	AuthType  Auth_type
+	AuthType  AuthType
 	UserID    string
 	KeyID     string
 	FolderID  string
@@ -106,7 +106,7 @@ func (s Status) IsStatusValid() error {
 	}
 }
 
-func (a Auth_type) IsAuthTypeValid() error {
+func (a AuthType) IsAuthTypeValid() error {
 	switch a {
 	case AuthTypePassword, AuthTypeKey, AuthTypeBoth:
 		return nil
