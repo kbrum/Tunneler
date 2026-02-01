@@ -172,6 +172,13 @@ func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, ssh
 }
 
 func (r *SupabaseSSHSessionRepository) DeleteSSHSession(ctx context.Context, sessionID string) (bool, error) {
-	// Implementation here
-	return false, nil
+	_, _, err := r.client.From("ssh_sessions").
+		Delete("representation", "estimated").
+		Eq("id", sessionID).
+		Execute()
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
