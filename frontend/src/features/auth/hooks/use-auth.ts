@@ -1,12 +1,13 @@
 import {createUserAction, loginUserAction} from '@/actions/auth.actions';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {dto} from '../../../../wailsjs/go/models';
 
 export function useLogin() {
   const queryClient = useQueryClient();
 
   const login = useMutation({
     mutationFn: (props: {email: string; password: string}) =>
-      loginUserAction(props.email, props.password),
+      loginUserAction(new dto.LoginRequestDTO(props)),
     onSuccess: async () => {
       await queryClient.resetQueries({queryKey: ['session']});
     },
@@ -24,7 +25,7 @@ export function useRegister() {
 
   const register = useMutation({
     mutationFn: (props: {email: string; password: string; name: string}) =>
-      createUserAction(props.email, props.password, props.name),
+      createUserAction(new dto.CreateUserRequestDTO(props)),
     onSuccess: async () => {
       await queryClient.resetQueries({queryKey: ['session']});
     },

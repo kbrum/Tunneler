@@ -30,6 +30,10 @@ type CreateFolderResponseDTO struct {
 	FolderName string `json:"folder_name"`
 }
 
+type GetSessionRequestDTO struct {
+	SessionID string `json:"session_id"`
+}
+
 type GetSessionResponseDTO struct {
 	ID                 string `json:"id"`
 	SSHSessionName     string `json:"ssh_session_name"`
@@ -39,4 +43,24 @@ type GetSessionResponseDTO struct {
 	SSHSessionStatus   string `json:"ssh_session_status"`
 	SSHSessionAuthType string `json:"ssh_session_auth_type"`
 	LastLogin          string `json:"last_login"`
+}
+
+type UpdateSessionRequestDTO struct {
+	ID                 string `json:"id"`
+	SSHSessionName     string `json:"ssh_session_name"`
+	SSHSessionIP       string `json:"ssh_session_ip"`
+	SSHSessionPort     int    `json:"ssh_session_port"`
+	SSHSessionUser     string `json:"ssh_session_user"`
+	SSHSessionStatus   string `json:"ssh_session_status"`
+	SSHSessionAuthType string `json:"ssh_session_auth_type"`
+}
+
+type UpdateSessionResponseDTO struct {
+	ID                 string `json:"id"`
+	SSHSessionName     string `json:"ssh_session_name"`
+	SSHSessionIP       string `json:"ssh_session_ip"`
+	SSHSessionPort     int    `json:"ssh_session_port"`
+	SSHSessionUser     string `json:"ssh_session_user"`
+	SSHSessionStatus   string `json:"ssh_session_status"`
+	SSHSessionAuthType string `json:"ssh_session_auth_type"`
 }

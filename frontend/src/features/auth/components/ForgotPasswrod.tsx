@@ -10,7 +10,7 @@ import {Link} from 'react-router-dom';
 import {
   resetPasswordSchema,
   type ResetPasswordSchema,
-} from '@/features/auth/types/auth-schemas';
+} from '@/features/auth/types/auth.schema';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {EmailInput} from '@/components/EmailInput';
 import {FormControl, FormField, FormItem} from '@/components/ui/form';

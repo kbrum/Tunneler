@@ -56,6 +56,15 @@ func (s *SSHService) GetSSHSessions(ctx context.Context) ([]*domain.SSHSession, 
 	return res, nil
 }
 
+func (s *SSHService) GetSSHSessionByID(ctx context.Context, sessionID string) (*domain.SSHSession, error) {
+	data, err := s.sshRepo.GetSSHSessionByID(ctx, sessionID)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
 func (s *SSHService) UpdateSSHSesion(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
 	if err := domain.ValidadeSSHSession(sshSession); err != nil {
 		return nil, err

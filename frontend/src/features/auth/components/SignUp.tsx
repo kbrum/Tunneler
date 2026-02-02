@@ -13,7 +13,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {
   registerSchema,
   type RegisterSchema,
-} from '@/features/auth/types/auth-schemas';
+} from '@/features/auth/types/auth.schema';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem} from '@/components/ui/form';
 import {NameInput} from '@/components/NameInput';
@@ -74,7 +74,6 @@ export function SignUp() {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="email"
@@ -119,7 +118,7 @@ export function SignUp() {
 
               <Button
                 type="submit"
-                className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]"
+                className="w-full bg-[#2f3191] text-[#ffffff] hover:bg-[#2f3191]/60"
                 disabled={isLoadingRegister}
               >
                 {isLoadingRegister ? <Spinner /> : <span>Sign Up</span>}

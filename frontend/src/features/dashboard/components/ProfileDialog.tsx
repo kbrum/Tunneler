@@ -15,13 +15,15 @@ export function ProfileDialog() {
       <DialogTrigger>
         <Button variant="ghost" className="h-8 w-30 p-0">
           <User className="h-4 w-4" />
-          <span>Profile</span>
+          <span className="font-semibold">Profile</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Profile</DialogTitle>
-          <DialogDescription>Manage your profile settings.</DialogDescription>
+        <DialogHeader className="flex items-center justify-center">
+          <DialogTitle className="text-2xl font-bold">Profile</DialogTitle>
+          <DialogDescription className="font-medium">
+            Manage your profile settings.
+          </DialogDescription>
         </DialogHeader>
       </DialogContent>
     </Dialog>

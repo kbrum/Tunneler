@@ -30,18 +30,20 @@ export function LogoutAlertDialog() {
       <AlertDialogTrigger asChild>
         <Button variant="ghost" className="h-8 w-30 p-0">
           <LogOut className="h-4 w-4" />
-          <span>Log out</span>
+          <span className="font-semibold">Log out</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="w-fit">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+          <AlertDialogTitle className="font-bold">
+            Are you sure you want to log out?
+          </AlertDialogTitle>
           <div className="flex flex-row justify-end gap-3 pt-4">
             <AlertDialogCancel disabled={isLoadingLogout}>
               Cancel
             </AlertDialogCancel>
             <Button
-              className="hover:bg-red-600 hover:text-white"
+              className="font-semibold hover:bg-red-600 hover:text-white"
               disabled={isLoadingLogout}
               onClick={handleLogout}
             >

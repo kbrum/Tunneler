@@ -64,6 +64,7 @@ type SSHSession struct {
 type SSHSessionRepository interface {
 	CreateSSHSession(ctx context.Context, sshSession *SSHSession, userID string, folderID string, keyID string) (*SSHSession, error)
 	GetSSHSessions(ctx context.Context, userID string) ([]*SSHSession, error)
+	GetSSHSessionByID(ctx context.Context, sessionID string) (*SSHSession, error)
 	UpdateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
 	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)
 }

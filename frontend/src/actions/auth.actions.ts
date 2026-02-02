@@ -1,3 +1,4 @@
+import type {dto} from '../../wailsjs/go/models';
 import {
   LoginUser,
   CreateUser,
@@ -5,9 +6,9 @@ import {
   GetUser,
 } from '../../wailsjs/go/adapter/UserController';
 
-export async function loginUserAction(email: string, password: string) {
+export async function loginUserAction(user: dto.LoginRequestDTO) {
   try {
-    return await LoginUser({email: email, password: password});
+    return await LoginUser(user);
   } catch (error) {
     console.error('Login Error', error);
     throw error;
@@ -15,9 +16,9 @@ export async function loginUserAction(email: string, password: string) {
 }
 
 // prettier-ignore
-export async function createUserAction(email: string, password: string,name: string,) {
+export async function createUserAction(user: dto.CreateUserRequestDTO) {
   try {
-    return await CreateUser({email: email, password: password, name: name});
+    return await CreateUser(user);
   } catch (error) {
     console.error('Create User Error', error);
     throw error;

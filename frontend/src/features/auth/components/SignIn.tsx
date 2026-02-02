@@ -14,10 +14,7 @@ import {PasswordInput} from '@/components/PasswordInput';
 import {EmailInput} from '@/components/EmailInput';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {
-  type LoginSchema,
-  loginSchema,
-} from '@/features/auth/types/auth-schemas';
+import {type LoginSchema, loginSchema} from '@/features/auth/types/auth.schema';
 import {useLogin} from '@/features/auth/hooks/use-auth';
 import {toast} from 'sonner';
 import {Spinner} from '@/components/ui/spinner';
@@ -96,7 +93,7 @@ export function SignIn() {
 
               <Button
                 type="submit"
-                className="w-full bg-[#ffffff] font-semibold text-[#09090b] hover:bg-[#e4e4e7]"
+                className="w-full bg-[#2f3191] text-[#ffffff] hover:bg-[#2f3191]/60"
                 disabled={isLoadingLogin}
               >
                 {isLoadingLogin ? <Spinner /> : <span>Sign In</span>}

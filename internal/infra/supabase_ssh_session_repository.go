@@ -125,6 +125,32 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessions(ctx context.Context, userI
 	return res, nil
 }
 
+func (r *SupabaseSSHSessionRepository) GetSSHSessionByID(ctx context.Context, sessionID string) (*domain.SSHSession, error) {
+	var data SSHSessionSchema
+
+	_, err := r.client.From("ssh_sessions").
+		Select("*", "estimated", false).
+		Eq("id", sessionID).
+		ExecuteTo(&data)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &domain.SSHSession{
+		ID:       data.ID,
+		Name:     data.Name,
+		IP:       data.IP,
+		Port:     data.Port,
+		User:     data.User,
+		Status:   data.Status,
+		AuthType: data.AuthType,
+		KeyID:    data.KeyID,
+		FolderID: data.FolderID,
+	}
+
+	return res, nil
+}
+
 func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
 	SSHSessionDB := SSHSessionSchema{
 		ID:       sshSession.ID,
@@ -163,7 +189,7 @@ func (r *SupabaseSSHSessionRepository) DeleteSSHSession(ctx context.Context, ses
 	_, _, err := r.client.From("ssh_sessions").
 		Delete("representation", "estimated").
 		Eq("id", sessionID).
-		ExecuteWithContext(ctx) // Assuming this exists
+		ExecuteWithContext(ctx)
 	if err != nil {
 		return false, err
 	}
