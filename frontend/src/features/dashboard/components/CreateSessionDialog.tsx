@@ -11,7 +11,7 @@ import {CreateSessionForm} from '@/features/dashboard/components/CreateSessionFo
 export function CreateSessionDialog() {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60">
           Create Session
         </Button>
