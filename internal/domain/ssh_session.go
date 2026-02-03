@@ -70,7 +70,7 @@ type SSHSessionRepository interface {
 }
 
 type SSHSessionService interface {
-	CreateSSHSession(ctx context.Context, sshSession *SSHSession, userID string, folderID string, keyID string) (*SSHSession, error)
+	CreateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
 	GetSSHSessions(ctx context.Context) ([]*SSHSession, error)
 	GetSSHSessionByID(ctx context.Context, sessionID string) (*SSHSession, error)
 	UpdateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
