@@ -12,7 +12,7 @@ import {User} from 'lucide-react';
 export function ProfileDialog() {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant="ghost" className="h-8 w-30 p-0">
           <User className="h-4 w-4" />
           <span className="font-semibold">Profile</span>
