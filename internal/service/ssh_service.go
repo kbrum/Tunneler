@@ -6,6 +6,8 @@ import (
 	"tunneler/internal/domain"
 )
 
+var _ domain.SSHSessionService = (*SSHService)(nil)
+
 type SSHService struct {
 	authRepo    domain.UserRepository
 	sessionRepo domain.SessionRepository
@@ -65,7 +67,7 @@ func (s *SSHService) GetSSHSessionByID(ctx context.Context, sessionID string) (*
 	return data, nil
 }
 
-func (s *SSHService) UpdateSSHSesion(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
+func (s *SSHService) UpdateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
 	if err := domain.ValidadeSSHSession(sshSession); err != nil {
 		return nil, err
 	}
@@ -78,7 +80,7 @@ func (s *SSHService) UpdateSSHSesion(ctx context.Context, sshSession *domain.SSH
 	return data, nil
 }
 
-func (s *SSHService) DeleteSSHSesion(ctx context.Context, sessionID string) (bool, error) {
+func (s *SSHService) DeleteSSHSession(ctx context.Context, sessionID string) (bool, error) {
 	bool, err := s.sshRepo.DeleteSSHSession(ctx, sessionID)
 	if err != nil {
 		return bool, err
