@@ -3,15 +3,15 @@ package main
 import (
 	"context"
 
-	"tunneler/internal/adapter"
+	"tunneler/internal/controller"
 )
 
 type App struct {
 	ctx     context.Context
-	manager *adapter.ControllerManager
+	manager *controller.ControllerManager
 }
 
-func NewApp(manager *adapter.ControllerManager) *App {
+func NewApp(manager *controller.ControllerManager) *App {
 	return &App{
 		manager: manager,
 	}

@@ -1,19 +1,18 @@
-package adapter
+package controller
 
 import (
 	"context"
 
 	"tunneler/internal/domain"
 	"tunneler/internal/dto"
-	"tunneler/internal/service"
 )
 
 type SSHController struct {
-	SSHService *service.SSHService
+	SSHService domain.SSHSessionService
 	ctx        context.Context
 }
 
-func NewSSHController(SSHService *service.SSHService) *SSHController {
+func NewSSHController(SSHService domain.SSHSessionService) *SSHController {
 	return &SSHController{
 		SSHService: SSHService,
 	}
@@ -107,7 +106,7 @@ func (c *SSHController) UpdateSSHSession(req dto.UpdateSessionRequestDTO) (*dto.
 		AuthType: domain.AuthType(req.SSHSessionAuthType),
 	}
 
-	data, err := c.SSHService.UpdateSSHSesion(c.ctx, sshSession)
+	data, err := c.SSHService.UpdateSSHSession(c.ctx, sshSession)
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +125,7 @@ func (c *SSHController) UpdateSSHSession(req dto.UpdateSessionRequestDTO) (*dto.
 }
 
 func (c *SSHController) DeleteSSHSession(sessionID string) (bool, error) {
-	bool, err := c.SSHService.DeleteSSHSesion(c.ctx, sessionID)
+	bool, err := c.SSHService.DeleteSSHSession(c.ctx, sessionID)
 	if err != nil {
 		return bool, err
 	}

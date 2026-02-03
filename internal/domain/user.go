@@ -16,13 +16,20 @@ type User struct {
 
 type UserRepository interface {
 	Create(ctx context.Context, user *User) (*User, error)
-	GetUserID(ctx context.Context, token string) (*User, error)
+	GetUser(ctx context.Context, token string) (*User, error)
 	Login(ctx context.Context, user *User) (*User, *Session, error)
 	LoginGoogleProvider(ctx context.Context, user *User) (*Session, error)
 	LoginGithubProvider(ctx context.Context, user *User) (*Session, error)
 	Logout(ctx context.Context) error
 	UpdateUser(ctx context.Context, user *User) error
 	Delete(ctx context.Context) error
+}
+
+type UserService interface {
+	Create(ctx context.Context, user *User) (*User, error)
+	Login(ctx context.Context, user *User) (*User, error)
+	Logout(ctx context.Context) error
+	GetUser(ctx context.Context) (*Session, error)
 }
 
 var (

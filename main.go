@@ -9,7 +9,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 
-	"tunneler/internal/adapter"
+	"tunneler/internal/controller"
 	"tunneler/internal/infra"
 	"tunneler/internal/service"
 )
@@ -35,7 +35,7 @@ func main() {
 
 	infraManager := infra.NewInfraManager(db, client)
 	serviceManager := service.NewServiceManager(infraManager)
-	controllerManager := adapter.NewControllerManager(serviceManager)
+	controllerManager := controller.NewControllerManager(serviceManager)
 	app := NewApp(controllerManager)
 
 	err = wails.Run(&options.App{

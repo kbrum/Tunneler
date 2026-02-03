@@ -1,19 +1,18 @@
-package adapter
+package controller
 
 import (
 	"context"
 
 	"tunneler/internal/domain"
 	"tunneler/internal/dto"
-	"tunneler/internal/service"
 )
 
 type UserController struct {
-	userService *service.UserService
+	userService domain.UserService
 	ctx         context.Context
 }
 
-func NewUserController(userService *service.UserService) *UserController {
+func NewUserController(userService domain.UserService) *UserController {
 	return &UserController{
 		userService: userService,
 	}

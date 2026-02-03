@@ -6,6 +6,8 @@ import (
 	"tunneler/internal/domain"
 )
 
+var _ domain.UserService = (*UserService)(nil)
+
 type UserService struct {
 	authRepo    domain.UserRepository
 	sessionRepo domain.SessionRepository

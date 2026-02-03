@@ -69,6 +69,14 @@ type SSHSessionRepository interface {
 	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)
 }
 
+type SSHSessionService interface {
+	CreateSSHSession(ctx context.Context, sshSession *SSHSession, userID string, folderID string, keyID string) (*SSHSession, error)
+	GetSSHSessions(ctx context.Context) ([]*SSHSession, error)
+	GetSSHSessionByID(ctx context.Context, sessionID string) (*SSHSession, error)
+	UpdateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
+	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)
+}
+
 var (
 	EmptyIPError       = errors.New("IP address cannot be empty")
 	EmptyPortError     = errors.New("Port cannot be empty")
