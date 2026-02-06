@@ -18,16 +18,15 @@ func NewSupabaseSSHSessionRepository(client *supabase.Client) *SupabaseSSHSessio
 	}
 }
 
-func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession, userID string, folderID string, keyID string) (*domain.SSHSession, error) {
+func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession, userID string, hashedPassword string, keyID string) (*domain.SSHSession, error) {
 	SSHSessionDB := SSHSessionSchema{
 		Name:     sshSession.Name,
 		IP:       sshSession.IP,
 		Port:     sshSession.Port,
 		User:     sshSession.User,
-		Password: sshSession.Password,
+		Password: hashedPassword,
 		UserID:   userID,
 		KeyID:    keyID,
-		FolderID: folderID,
 		Metadata: domain.SSHSessionMetadata{
 			Audit: domain.SSHSessionAudit{
 				LastExitCode: sshSession.Metadata.Audit.LastExitCode,

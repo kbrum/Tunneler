@@ -34,7 +34,7 @@ export function useSSHSessions() {
       ip: string;
       port: number;
       user: string;
-      password?: string;
+      password: string;
       folder_id: string;
       key_id: string;
       auth_type: string;

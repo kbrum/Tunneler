@@ -1,5 +1,11 @@
 import {Button} from '@/components/ui/button';
-import {Form, FormControl, FormField, FormItem} from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
 import {
   sessionCreateSchema,
@@ -18,25 +24,28 @@ export function CreateSessionForm() {
     defaultValues: {
       name: '',
       user: '',
+      password: '',
       ip: '',
-      port: 22,
+      port: '22',
     },
   });
 
   const handleCreate = async (data: SessionCreateSchema) => {
+    console.log('Submitting form data:', data);
     try {
       await createSSHSession({
-        name: data.name,
+        name: data.name ?? '',
         ip: data.ip,
         user: data.user,
-        port: data.port,
+        password: data.password,
+        port: Number(data.port),
         auth_type: 'password',
         folder_id: '',
         key_id: '',
       });
-      form.reset();
+      console.log('Session created successfully');
     } catch (error) {
-      console.error(error);
+      console.error('Error creating session:', error);
     }
   };
 
@@ -54,6 +63,7 @@ export function CreateSessionForm() {
               <FormControl>
                 <Input placeholder="Enter the IP of the server" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -65,6 +75,19 @@ export function CreateSessionForm() {
               <FormControl>
                 <Input placeholder="Enter the remote user" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({field}) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Enter the remote user" {...field} />
+              </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -74,13 +97,9 @@ export function CreateSessionForm() {
           render={({field}) => (
             <FormItem>
               <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Enter the port"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
+                <Input placeholder="Enter the port" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -95,6 +114,7 @@ export function CreateSessionForm() {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

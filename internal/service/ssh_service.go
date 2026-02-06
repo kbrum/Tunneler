@@ -35,8 +35,12 @@ func (s *SSHService) CreateSSHSession(ctx context.Context, sshSession *domain.SS
 	}
 
 	userID := localSession.User.ID
+	hashedPassword, err := s.HashPassword(sshSession.Password)
+	if err != nil {
+		return nil, err
+	}
 
-	data, err := s.sshRepo.CreateSSHSession(ctx, sshSession, userID, "", "")
+	data, err := s.sshRepo.CreateSSHSession(ctx, sshSession, userID, hashedPassword, "")
 	if err != nil {
 		return nil, err
 	}
