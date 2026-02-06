@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"tunneler/internal/domain"
 
@@ -24,23 +25,46 @@ func NewSSHService(auth domain.UserRepository, session domain.SessionRepository,
 	}
 }
 
-func (s *SSHService) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
-	if err := domain.ValidadeSSHSession(sshSession); err != nil {
-		return nil, err
-	}
-
-	localSession, err := s.sessionRepo.GetSession(ctx)
+func (s *SSHService) ensureValidSession(ctx context.Context) (*domain.Session, error) {
+	session, err := s.sessionRepo.GetSession(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	userID := localSession.User.ID
+	if time.Now().Unix() > session.ExpiresAt-60 {
+		newSession, err := s.authRepo.RefreshToken(ctx, session.RefreshToken)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := s.sessionRepo.SaveSession(ctx, newSession); err != nil {
+			return nil, err
+		}
+		return newSession, nil
+	}
+
+	return session, nil
+}
+
+func (s *SSHService) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
+	localSession, err := s.ensureValidSession(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	sshSession.UserID = localSession.User.ID
+	sshSession.Status = domain.StatusOffline
+
+	if err := domain.ValidadeSSHSession(sshSession); err != nil {
+		return nil, err
+	}
+
 	hashedPassword, err := s.HashPassword(sshSession.Password)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := s.sshRepo.CreateSSHSession(ctx, sshSession, userID, hashedPassword, "")
+	data, err := s.sshRepo.CreateSSHSession(ctx, localSession.AccessToken, sshSession, sshSession.UserID, hashedPassword, sshSession.KeyID)
 	if err != nil {
 		return nil, err
 	}
@@ -49,14 +73,14 @@ func (s *SSHService) CreateSSHSession(ctx context.Context, sshSession *domain.SS
 }
 
 func (s *SSHService) GetSSHSessions(ctx context.Context) ([]*domain.SSHSession, error) {
-	localSession, err := s.sessionRepo.GetSession(ctx)
+	localSession, err := s.ensureValidSession(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	userID := localSession.User.ID
 
-	res, err := s.sshRepo.GetSSHSessions(ctx, userID)
+	res, err := s.sshRepo.GetSSHSessions(ctx, localSession.AccessToken, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +107,12 @@ func (s *SSHService) VerifyPassword(hashedPassword string, password string) (boo
 }
 
 func (s *SSHService) GetSSHSessionByID(ctx context.Context, sessionID string) (*domain.SSHSession, error) {
-	data, err := s.sshRepo.GetSSHSessionByID(ctx, sessionID)
+	localSession, err := s.ensureValidSession(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := s.sshRepo.GetSSHSessionByID(ctx, localSession.AccessToken, sessionID)
 	if err != nil {
 		return nil, err
 	}
@@ -92,11 +121,18 @@ func (s *SSHService) GetSSHSessionByID(ctx context.Context, sessionID string) (*
 }
 
 func (s *SSHService) UpdateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
+	localSession, err := s.ensureValidSession(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	sshSession.UserID = localSession.User.ID
+
 	if err := domain.ValidadeSSHSession(sshSession); err != nil {
 		return nil, err
 	}
 
-	data, err := s.sshRepo.UpdateSSHSession(ctx, sshSession)
+	data, err := s.sshRepo.UpdateSSHSession(ctx, localSession.AccessToken, sshSession)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +141,12 @@ func (s *SSHService) UpdateSSHSession(ctx context.Context, sshSession *domain.SS
 }
 
 func (s *SSHService) DeleteSSHSession(ctx context.Context, sessionID string) (bool, error) {
-	bool, err := s.sshRepo.DeleteSSHSession(ctx, sessionID)
+	localSession, err := s.ensureValidSession(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	bool, err := s.sshRepo.DeleteSSHSession(ctx, localSession.AccessToken, sessionID)
 	if err != nil {
 		return bool, err
 	}

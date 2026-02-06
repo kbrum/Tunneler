@@ -2,6 +2,7 @@ package infra
 
 import (
 	"context"
+	"os"
 
 	"tunneler/internal/domain"
 
@@ -18,7 +19,25 @@ func NewSupabaseSSHSessionRepository(client *supabase.Client) *SupabaseSSHSessio
 	}
 }
 
-func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, sshSession *domain.SSHSession, userID string, hashedPassword string, keyID string) (*domain.SSHSession, error) {
+func (r *SupabaseSSHSessionRepository) getClient(token string) (*supabase.Client, error) {
+	if token == "" {
+		return r.client, nil
+	}
+	opts := &supabase.ClientOptions{
+		Schema: "ssh",
+		Headers: map[string]string{
+			"Authorization": "Bearer " + token,
+		},
+	}
+	return supabase.NewClient(os.Getenv("SUPABASE_URL"), os.Getenv("PUBLIC_SUPABASE_KEY"), opts)
+}
+
+func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, token string, sshSession *domain.SSHSession, userID string, hashedPassword string, keyID string) (*domain.SSHSession, error) {
+	client, err := r.getClient(token)
+	if err != nil {
+		return nil, err
+	}
+
 	SSHSessionDB := SSHSessionSchema{
 		Name:     sshSession.Name,
 		IP:       sshSession.IP,
@@ -27,6 +46,7 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 		Password: hashedPassword,
 		UserID:   userID,
 		KeyID:    keyID,
+		AuthType: sshSession.AuthType,
 		Metadata: domain.SSHSessionMetadata{
 			Audit: domain.SSHSessionAudit{
 				LastExitCode: sshSession.Metadata.Audit.LastExitCode,
@@ -45,7 +65,7 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 
 	var data []SSHSessionSchema
 
-	_, err := r.client.From("ssh_sessions").
+	_, err = client.From("ssh_sessions").
 		Insert(SSHSessionDB, false, "", "representation", "estimated").
 		ExecuteToWithContext(ctx, &data)
 	if err != nil {
@@ -79,10 +99,15 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 	return res, nil
 }
 
-func (r *SupabaseSSHSessionRepository) GetSSHSessions(ctx context.Context, userID string) ([]*domain.SSHSession, error) {
+func (r *SupabaseSSHSessionRepository) GetSSHSessions(ctx context.Context, token string, userID string) ([]*domain.SSHSession, error) {
+	client, err := r.getClient(token)
+	if err != nil {
+		return nil, err
+	}
+
 	var data []SSHSessionSchema
 
-	_, err := r.client.From("ssh_sessions").
+	_, err = client.From("ssh_sessions").
 		Select("*", "estimated", false).
 		Eq("user_id", userID).
 		ExecuteToWithContext(ctx, &data)
@@ -123,10 +148,15 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessions(ctx context.Context, userI
 	return res, nil
 }
 
-func (r *SupabaseSSHSessionRepository) GetSSHSessionByID(ctx context.Context, sessionID string) (*domain.SSHSession, error) {
+func (r *SupabaseSSHSessionRepository) GetSSHSessionByID(ctx context.Context, token string, sessionID string) (*domain.SSHSession, error) {
+	client, err := r.getClient(token)
+	if err != nil {
+		return nil, err
+	}
+
 	var data SSHSessionSchema
 
-	_, err := r.client.From("ssh_sessions").
+	_, err = client.From("ssh_sessions").
 		Select("*", "estimated", false).
 		Eq("id", sessionID).
 		ExecuteTo(&data)
@@ -148,10 +178,15 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessionByID(ctx context.Context, se
 	return res, nil
 }
 
-func (r *SupabaseSSHSessionRepository) GetPassword(ctx context.Context, sessionID string) (string, error) {
+func (r *SupabaseSSHSessionRepository) GetPassword(ctx context.Context, token string, sessionID string) (string, error) {
+	client, err := r.getClient(token)
+	if err != nil {
+		return "", err
+	}
+
 	var data SSHSessionSchema
 
-	_, err := r.client.From("ssh_sessions").
+	_, err = client.From("ssh_sessions").
 		Select("password", "estimated", false).
 		Eq("id", sessionID).
 		ExecuteTo(&data)
@@ -162,7 +197,12 @@ func (r *SupabaseSSHSessionRepository) GetPassword(ctx context.Context, sessionI
 	return data.Password, nil
 }
 
-func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
+func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, token string, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
+	client, err := r.getClient(token)
+	if err != nil {
+		return nil, err
+	}
+
 	SSHSessionDB := SSHSessionSchema{
 		ID:       sshSession.ID,
 		Name:     sshSession.Name,
@@ -175,7 +215,7 @@ func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, ssh
 
 	var data SSHSessionSchema
 
-	_, err := r.client.From("ssh_sessions").
+	_, err = client.From("ssh_sessions").
 		Update(SSHSessionDB, "representation", "estimated").
 		Eq("id", sshSession.ID).
 		ExecuteToWithContext(ctx, &data)
@@ -195,8 +235,13 @@ func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, ssh
 	return res, nil
 }
 
-func (r *SupabaseSSHSessionRepository) DeleteSSHSession(ctx context.Context, sessionID string) (bool, error) {
-	_, _, err := r.client.From("ssh_sessions").
+func (r *SupabaseSSHSessionRepository) DeleteSSHSession(ctx context.Context, token string, sessionID string) (bool, error) {
+	client, err := r.getClient(token)
+	if err != nil {
+		return false, err
+	}
+
+	_, _, err = client.From("ssh_sessions").
 		Delete("representation", "estimated").
 		Eq("id", sessionID).
 		ExecuteWithContext(ctx)

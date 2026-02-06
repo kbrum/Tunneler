@@ -23,6 +23,7 @@ type UserRepository interface {
 	Logout(ctx context.Context) error
 	UpdateUser(ctx context.Context, user *User) error
 	Delete(ctx context.Context) error
+	RefreshToken(ctx context.Context, refreshToken string) (*Session, error)
 }
 
 type UserService interface {

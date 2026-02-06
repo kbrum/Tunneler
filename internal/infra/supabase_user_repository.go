@@ -105,3 +105,25 @@ func (s *SupabaseUserRepository) UpdateUser(ctx context.Context, user *domain.Us
 func (s *SupabaseUserRepository) Delete(ctx context.Context) error {
 	return nil
 }
+
+func (s *SupabaseUserRepository) RefreshToken(ctx context.Context, refreshToken string) (*domain.Session, error) {
+	data, err := s.client.Auth.RefreshToken(refreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	sessionResponse := &domain.Session{
+		AccessToken:  data.AccessToken,
+		RefreshToken: data.RefreshToken,
+		TokenType:    data.TokenType,
+		ExpiresIn:    data.ExpiresIn,
+		ExpiresAt:    data.ExpiresAt,
+		User: domain.User{
+			ID:    data.User.ID.String(),
+			Name:  data.User.UserMetadata["name"].(string),
+			Email: data.User.Email,
+		},
+	}
+
+	return sessionResponse, nil
+}

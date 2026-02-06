@@ -15,6 +15,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {useForm} from 'react-hook-form';
 import {useSSHSessions} from '../hooks/use-ssh';
 import {Spinner} from '@/components/ui/spinner';
+import {toast} from 'sonner';
 
 export function CreateSessionForm() {
   const {createSSHSession, isCreating, isUpdating} = useSSHSessions();
@@ -44,8 +45,10 @@ export function CreateSessionForm() {
         key_id: '',
       });
       console.log('Session created successfully');
+      toast.success('Session created successfully');
     } catch (error) {
       console.error('Error creating session:', error);
+      toast.error('Error creating session');
     }
   };
 
@@ -85,7 +88,7 @@ export function CreateSessionForm() {
           render={({field}) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Enter the remote user" {...field} />
+                <Input placeholder="Enter the password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

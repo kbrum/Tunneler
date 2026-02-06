@@ -62,12 +62,12 @@ type SSHSession struct {
 }
 
 type SSHSessionRepository interface {
-	CreateSSHSession(ctx context.Context, sshSession *SSHSession, userID string, folderID string, keyID string) (*SSHSession, error)
-	GetSSHSessions(ctx context.Context, userID string) ([]*SSHSession, error)
-	GetSSHSessionByID(ctx context.Context, sessionID string) (*SSHSession, error)
-	GetPassword(ctx context.Context, sessionID string) (string, error)
-	UpdateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
-	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)
+	CreateSSHSession(ctx context.Context, token string, sshSession *SSHSession, userID string, hashedPassword string, keyID string) (*SSHSession, error)
+	GetSSHSessions(ctx context.Context, token string, userID string) ([]*SSHSession, error)
+	GetSSHSessionByID(ctx context.Context, token string, sessionID string) (*SSHSession, error)
+	GetPassword(ctx context.Context, token string, sessionID string) (string, error)
+	UpdateSSHSession(ctx context.Context, token string, sshSession *SSHSession) (*SSHSession, error)
+	DeleteSSHSession(ctx context.Context, token string, sessionID string) (bool, error)
 }
 
 type SSHSessionService interface {
