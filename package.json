@@ -24,5 +24,6 @@
     "lint-staged": "^16.2.7"
   },
   "dependencies": {
+    "zustand": "^5.0.11"
   }
 }

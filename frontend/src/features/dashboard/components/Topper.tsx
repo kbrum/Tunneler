@@ -1,5 +1,5 @@
 import {Card, CardContent} from '@/components/ui/card';
-import {CreateSessionDialog} from './CreateSessionDialog';
+import {CreateSessionDialog} from './SessionDialog';
 
 export function Topper() {
   return (

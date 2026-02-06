@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {CreateSessionForm} from '@/features/dashboard/components/CreateSessionForm';
+import {CreateSessionForm} from '@/features/dashboard/components/SessionForm';
 
 export function CreateSessionDialog() {
   return (
