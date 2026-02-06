@@ -16,9 +16,11 @@ import {useForm} from 'react-hook-form';
 import {useSSHSessions} from '../hooks/use-ssh';
 import {Spinner} from '@/components/ui/spinner';
 import {toast} from 'sonner';
+import {useSessionStore} from '@/features/dashboard/store/session.store';
 
-export function CreateSessionForm() {
+export function SessionForm() {
   const {createSSHSession, isCreating, isUpdating} = useSSHSessions();
+  const {setIsDialogOpen} = useSessionStore();
 
   const form = useForm<SessionCreateSchema>({
     resolver: zodResolver(sessionCreateSchema),
@@ -46,6 +48,7 @@ export function CreateSessionForm() {
       });
       console.log('Session created successfully');
       toast.success('Session created successfully');
+      setIsDialogOpen(false);
     } catch (error) {
       console.error('Error creating session:', error);
       toast.error('Error creating session');
@@ -121,13 +124,14 @@ export function CreateSessionForm() {
             </FormItem>
           )}
         />
-
-        <Button
-          type="submit"
-          className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
-        >
-          {isCreating || isUpdating ? <Spinner /> : 'Create Session'}
-        </Button>
+        <div className="flex w-full items-center justify-end">
+          <Button
+            type="submit"
+            className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
+          >
+            {isCreating || isUpdating ? <Spinner /> : 'Create Session'}
+          </Button>
+        </div>
       </form>
     </Form>
   );
