@@ -11,7 +11,7 @@ import {useSSHSessions} from '../hooks/use-ssh';
 import {Spinner} from '@/components/ui/spinner';
 
 export function CreateSessionForm() {
-  const {createSSHSession, isCreating} = useSSHSessions();
+  const {createSSHSession, isCreating, isUpdating} = useSSHSessions();
 
   const form = useForm<SessionCreateSchema>({
     resolver: zodResolver(sessionCreateSchema),
@@ -23,17 +23,18 @@ export function CreateSessionForm() {
     },
   });
 
-  const handleCreateSession = async (data: SessionCreateSchema) => {
+  const handleCreate = async (data: SessionCreateSchema) => {
     try {
-      return await createSSHSession({
-        ssh_session_name: data.name,
-        ssh_session_ip: data.ip,
-        ssh_session_port: data.port,
-        ssh_session_user: data.user,
+      await createSSHSession({
+        name: data.name,
+        ip: data.ip,
+        user: data.user,
+        port: data.port,
+        auth_type: 'password',
         folder_id: '',
         key_id: '',
-        ssh_session_auth_type: 'password',
       });
+      form.reset();
     } catch (error) {
       console.error(error);
     }
@@ -42,7 +43,7 @@ export function CreateSessionForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleCreateSession)}
+        onSubmit={form.handleSubmit(handleCreate)}
         className="flex h-full w-full flex-col gap-4"
       >
         <FormField
@@ -97,15 +98,13 @@ export function CreateSessionForm() {
             </FormItem>
           )}
         />
-        <div className="flex w-full items-center justify-end">
-          <Button
-            type="submit"
-            disabled={isCreating}
-            className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
-          >
-            {isCreating ? <Spinner /> : 'Create Session'}
-          </Button>
-        </div>
+
+        <Button
+          type="submit"
+          className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
+        >
+          {isCreating || isUpdating ? <Spinner /> : 'Create Session'}
+        </Button>
       </form>
     </Form>
   );

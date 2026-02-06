@@ -10,6 +10,7 @@ type SSHSessionSchema struct {
 	ID        string                    `json:"id"`
 	CreatedAt time.Time                 `json:"created_at"`
 	Name      string                    `json:"session_name"`
+	Password  string                    `json:"password"`
 	User      string                    `json:"remote_user"`
 	IP        string                    `json:"session_ip"`
 	Port      int                       `json:"ssh_port"`

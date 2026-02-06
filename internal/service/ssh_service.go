@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"tunneler/internal/domain"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var _ domain.SSHSessionService = (*SSHService)(nil)
@@ -56,6 +58,24 @@ func (s *SSHService) GetSSHSessions(ctx context.Context) ([]*domain.SSHSession, 
 	}
 
 	return res, nil
+}
+
+func (s *SSHService) HashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hashedPassword), nil
+}
+
+func (s *SSHService) VerifyPassword(hashedPassword string, password string) (bool, error) {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 func (s *SSHService) GetSSHSessionByID(ctx context.Context, sessionID string) (*domain.SSHSession, error) {

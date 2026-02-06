@@ -24,6 +24,7 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 		IP:       sshSession.IP,
 		Port:     sshSession.Port,
 		User:     sshSession.User,
+		Password: sshSession.Password,
 		UserID:   userID,
 		KeyID:    keyID,
 		FolderID: folderID,
@@ -53,14 +54,13 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, ssh
 	}
 
 	res := &domain.SSHSession{
-		ID:       data[0].ID,
-		Name:     data[0].Name,
-		IP:       data[0].IP,
-		Port:     data[0].Port,
-		User:     data[0].User,
-		UserID:   data[0].UserID,
-		KeyID:    data[0].KeyID,
-		FolderID: data[0].FolderID,
+		ID:     data[0].ID,
+		Name:   data[0].Name,
+		IP:     data[0].IP,
+		Port:   data[0].Port,
+		User:   data[0].User,
+		UserID: data[0].UserID,
+		KeyID:  data[0].KeyID,
 		Metadata: domain.SSHSessionMetadata{
 			Audit: domain.SSHSessionAudit{
 				LastExitCode: data[0].Metadata.Audit.LastExitCode,
@@ -103,7 +103,6 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessions(ctx context.Context, userI
 			AuthType:  item.AuthType,
 			UserID:    item.UserID,
 			KeyID:     item.KeyID,
-			FolderID:  item.FolderID,
 			LastLogin: item.LastLogin,
 			Metadata: domain.SSHSessionMetadata{
 				Audit: domain.SSHSessionAudit{
@@ -145,10 +144,23 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessionByID(ctx context.Context, se
 		Status:   data.Status,
 		AuthType: data.AuthType,
 		KeyID:    data.KeyID,
-		FolderID: data.FolderID,
 	}
 
 	return res, nil
+}
+
+func (r *SupabaseSSHSessionRepository) GetPassword(ctx context.Context, sessionID string) (string, error) {
+	var data SSHSessionSchema
+
+	_, err := r.client.From("ssh_sessions").
+		Select("password", "estimated", false).
+		Eq("id", sessionID).
+		ExecuteTo(&data)
+	if err != nil {
+		return "", err
+	}
+
+	return data.Password, nil
 }
 
 func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
@@ -156,10 +168,10 @@ func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, ssh
 		ID:       sshSession.ID,
 		Name:     sshSession.Name,
 		IP:       sshSession.IP,
+		Password: sshSession.Password,
 		Port:     sshSession.Port,
 		User:     sshSession.User,
 		KeyID:    sshSession.KeyID,
-		FolderID: sshSession.FolderID,
 	}
 
 	var data SSHSessionSchema
@@ -173,13 +185,12 @@ func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, ssh
 	}
 
 	res := &domain.SSHSession{
-		ID:       data.ID,
-		Name:     data.Name,
-		IP:       data.IP,
-		Port:     data.Port,
-		User:     data.User,
-		KeyID:    data.KeyID,
-		FolderID: data.FolderID,
+		ID:    data.ID,
+		Name:  data.Name,
+		IP:    data.IP,
+		Port:  data.Port,
+		User:  data.User,
+		KeyID: data.KeyID,
 	}
 
 	return res, nil

@@ -4,8 +4,8 @@ import {dto} from '../models';
 import {context} from '../models';
 
 export function CreateSSHSession(
-  arg1: dto.CreateSSHSessionRequestDTO,
-): Promise<dto.CreateSSHSessionResponseDTO>;
+  arg1: dto.CreateSessionRequestDTO,
+): Promise<dto.CreateSessionResponseDTO>;
 
 export function DeleteSSHSession(arg1: string): Promise<boolean>;
 

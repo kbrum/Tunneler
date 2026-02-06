@@ -30,14 +30,15 @@ export function useSSHSessions() {
 
   const createMutation = useMutation({
     mutationFn: (props: {
-      ssh_session_name: string;
-      ssh_session_ip: string;
-      ssh_session_port: number;
-      ssh_session_user: string;
+      name: string;
+      ip: string;
+      port: number;
+      user: string;
+      password?: string;
       folder_id: string;
       key_id: string;
-      ssh_session_auth_type: string;
-    }) => createSessionAction(new dto.CreateSSHSessionRequestDTO(props)),
+      auth_type: string;
+    }) => createSessionAction(new dto.CreateSessionRequestDTO(props)),
     onSuccess: async () => {
       await queryClient.invalidateQueries({queryKey: ['sshSession']});
     },
@@ -46,12 +47,12 @@ export function useSSHSessions() {
   const updateMutation = useMutation({
     mutationFn: (props: {
       id: string;
-      ssh_session_name: string;
-      ssh_session_ip: string;
-      ssh_session_port: number;
-      ssh_session_user: string;
-      ssh_session_status: string;
-      ssh_session_auth_type: string;
+      name: string;
+      ip: string;
+      port: number;
+      user: string;
+      status: string;
+      auth_type: string;
     }) => updateSessionAction(new dto.UpdateSessionRequestDTO(props)),
     onSuccess: async () => {
       await queryClient.invalidateQueries({queryKey: ['sshSession']});
@@ -70,12 +71,12 @@ export function useSSHSessions() {
     isLoading,
     isError,
     getSessionByID: getSessionByID.mutateAsync,
-    isGettingByID: getSessionByID.isPending,
+    isLoadingGetByID: getSessionByID.isPending,
     isErrorGetByID: getSessionByID.isError,
     createSSHSession: createMutation.mutateAsync,
     isCreating: createMutation.isPending,
     isErrorCreate: createMutation.isError,
-    updateSession: updateMutation.mutateAsync,
+    updateSSHSession: updateMutation.mutateAsync,
     isUpdating: updateMutation.isPending,
     isErrorUpdate: updateMutation.isError,
     deleteSSHSession: deleteMutation.mutateAsync,
