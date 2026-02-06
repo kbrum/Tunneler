@@ -22,15 +22,15 @@ func (c *SSHController) Startup(ctx context.Context) {
 	c.ctx = ctx
 }
 
-func (c *SSHController) CreateSSHSession(req dto.CreateSSHSessionRequestDTO) (*dto.CreateSSHSessionResponseDTO, error) {
+func (c *SSHController) CreateSSHSession(req dto.CreateSessionRequestDTO) (*dto.CreateSessionResponseDTO, error) {
 	sshSession := &domain.SSHSession{
-		Name:     req.SSHSessionName,
-		IP:       req.SSHSessionIP,
-		Port:     req.SSHSessionPort,
-		User:     req.SSHSessionUser,
-		FolderID: req.FolderID,
+		Name:     req.Name,
+		IP:       req.IP,
+		Port:     req.Port,
+		User:     req.User,
+		Password: req.Password,
 		KeyID:    req.KeyID,
-		AuthType: domain.AuthType(req.SSHSessionAuthType),
+		AuthType: domain.AuthType(req.AuthType),
 	}
 
 	data, err := c.SSHService.CreateSSHSession(c.ctx, sshSession)
@@ -38,15 +38,15 @@ func (c *SSHController) CreateSSHSession(req dto.CreateSSHSessionRequestDTO) (*d
 		return nil, err
 	}
 
-	res := &dto.CreateSSHSessionResponseDTO{
-		ID:                 data.ID,
-		SSHSessionName:     data.Name,
-		SSHSessionIP:       data.IP,
-		SSHSessionPort:     data.Port,
-		SSHSessionUser:     data.User,
-		SSHSessionStatus:   string(data.Status),
-		SSHSessionAuthType: string(data.AuthType),
-		LastLogin:          data.LastLogin.String(),
+	res := &dto.CreateSessionResponseDTO{
+		ID:        data.ID,
+		Name:      data.Name,
+		IP:        data.IP,
+		Port:      data.Port,
+		User:      data.User,
+		Status:    string(data.Status),
+		AuthType:  string(data.AuthType),
+		LastLogin: data.LastLogin.String(),
 	}
 
 	return res, nil
@@ -61,14 +61,14 @@ func (c *SSHController) GetSSHSessions() ([]*dto.GetSessionResponseDTO, error) {
 	res := make([]*dto.GetSessionResponseDTO, len(sessions))
 	for i, session := range sessions {
 		res[i] = &dto.GetSessionResponseDTO{
-			ID:                 session.ID,
-			SSHSessionName:     session.Name,
-			SSHSessionIP:       session.IP,
-			SSHSessionPort:     session.Port,
-			SSHSessionUser:     session.User,
-			SSHSessionStatus:   string(session.Status),
-			SSHSessionAuthType: string(session.AuthType),
-			LastLogin:          session.LastLogin.String(),
+			ID:        session.ID,
+			Name:      session.Name,
+			IP:        session.IP,
+			Port:      session.Port,
+			User:      session.User,
+			Status:    string(session.Status),
+			AuthType:  string(session.AuthType),
+			LastLogin: session.LastLogin.String(),
 		}
 	}
 
@@ -76,20 +76,20 @@ func (c *SSHController) GetSSHSessions() ([]*dto.GetSessionResponseDTO, error) {
 }
 
 func (c *SSHController) GetSSHSessionByID(req dto.GetSessionRequestDTO) (*dto.GetSessionResponseDTO, error) {
-	session, err := c.SSHService.GetSSHSessionByID(c.ctx, req.SessionID)
+	session, err := c.SSHService.GetSSHSessionByID(c.ctx, req.ID)
 	if err != nil {
 		return nil, err
 	}
 
 	res := &dto.GetSessionResponseDTO{
-		ID:                 session.ID,
-		SSHSessionName:     session.Name,
-		SSHSessionIP:       session.IP,
-		SSHSessionPort:     session.Port,
-		SSHSessionUser:     session.User,
-		SSHSessionStatus:   string(session.Status),
-		SSHSessionAuthType: string(session.AuthType),
-		LastLogin:          session.LastLogin.String(),
+		ID:        session.ID,
+		Name:      session.Name,
+		IP:        session.IP,
+		Port:      session.Port,
+		User:      session.User,
+		Status:    string(session.Status),
+		AuthType:  string(session.AuthType),
+		LastLogin: session.LastLogin.String(),
 	}
 
 	return res, nil
@@ -98,12 +98,13 @@ func (c *SSHController) GetSSHSessionByID(req dto.GetSessionRequestDTO) (*dto.Ge
 func (c *SSHController) UpdateSSHSession(req dto.UpdateSessionRequestDTO) (*dto.UpdateSessionResponseDTO, error) {
 	sshSession := &domain.SSHSession{
 		ID:       req.ID,
-		Name:     req.SSHSessionName,
-		IP:       req.SSHSessionIP,
-		Port:     req.SSHSessionPort,
-		User:     req.SSHSessionUser,
-		Status:   domain.Status(req.SSHSessionStatus),
-		AuthType: domain.AuthType(req.SSHSessionAuthType),
+		Name:     req.Name,
+		Password: req.Password,
+		IP:       req.IP,
+		Port:     req.Port,
+		User:     req.User,
+		Status:   domain.Status(req.Status),
+		AuthType: domain.AuthType(req.AuthType),
 	}
 
 	data, err := c.SSHService.UpdateSSHSession(c.ctx, sshSession)
@@ -112,13 +113,13 @@ func (c *SSHController) UpdateSSHSession(req dto.UpdateSessionRequestDTO) (*dto.
 	}
 
 	res := &dto.UpdateSessionResponseDTO{
-		ID:                 data.ID,
-		SSHSessionName:     data.Name,
-		SSHSessionIP:       data.IP,
-		SSHSessionPort:     data.Port,
-		SSHSessionUser:     data.User,
-		SSHSessionStatus:   string(data.Status),
-		SSHSessionAuthType: string(data.AuthType),
+		ID:       data.ID,
+		Name:     data.Name,
+		IP:       data.IP,
+		Port:     data.Port,
+		User:     data.User,
+		Status:   string(data.Status),
+		AuthType: string(data.AuthType),
 	}
 
 	return res, nil

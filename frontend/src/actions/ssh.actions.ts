@@ -8,7 +8,7 @@ import {
 } from '../../wailsjs/go/controller/SSHController';
 
 export async function createSessionAction(
-  session: dto.CreateSSHSessionRequestDTO,
+  session: dto.CreateSessionRequestDTO,
 ) {
   try {
     return await CreateSSHSession(session);

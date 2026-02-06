@@ -7,8 +7,12 @@ import {
 } from '@/features/dashboard/types/session.schema';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useForm} from 'react-hook-form';
+import {useSSHSessions} from '../hooks/use-ssh';
+import {Spinner} from '@/components/ui/spinner';
 
 export function CreateSessionForm() {
+  const {createSSHSession, isCreating, isUpdating} = useSSHSessions();
+
   const form = useForm<SessionCreateSchema>({
     resolver: zodResolver(sessionCreateSchema),
     defaultValues: {
@@ -19,9 +23,29 @@ export function CreateSessionForm() {
     },
   });
 
+  const handleCreate = async (data: SessionCreateSchema) => {
+    try {
+      await createSSHSession({
+        ssh_session_name: data.name,
+        ssh_session_ip: data.ip,
+        ssh_session_user: data.user,
+        ssh_session_port: data.port,
+        ssh_session_auth_type: 'password',
+        folder_id: '',
+        key_id: '',
+      });
+      form.reset();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Form {...form}>
-      <form className="flex h-full w-full flex-col gap-4">
+      <form
+        onSubmit={form.handleSubmit(handleCreate)}
+        className="flex h-full w-full flex-col gap-4"
+      >
         <FormField
           control={form.control}
           name="ip"
@@ -74,7 +98,7 @@ export function CreateSessionForm() {
           type="submit"
           className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
         >
-          Create Session
+          {isCreating || isUpdating ? <Spinner /> : 'Create Session'}
         </Button>
       </form>
     </Form>

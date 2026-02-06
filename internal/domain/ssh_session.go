@@ -50,13 +50,13 @@ type SSHSession struct {
 	CreatedAt time.Time
 	Name      string
 	User      string
+	Password  string
 	IP        string
 	Port      int
 	Status    Status
 	AuthType  AuthType
 	UserID    string
 	KeyID     string
-	FolderID  string
 	LastLogin time.Time
 	Metadata  SSHSessionMetadata
 }
@@ -65,6 +65,7 @@ type SSHSessionRepository interface {
 	CreateSSHSession(ctx context.Context, sshSession *SSHSession, userID string, folderID string, keyID string) (*SSHSession, error)
 	GetSSHSessions(ctx context.Context, userID string) ([]*SSHSession, error)
 	GetSSHSessionByID(ctx context.Context, sessionID string) (*SSHSession, error)
+	GetPassword(ctx context.Context, sessionID string) (string, error)
 	UpdateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
 	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)
 }
@@ -72,6 +73,8 @@ type SSHSessionRepository interface {
 type SSHSessionService interface {
 	CreateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
 	GetSSHSessions(ctx context.Context) ([]*SSHSession, error)
+	HashPassword(password string) (string, error)
+	VerifyPassword(password string, hashedPassword string) (bool, error)
 	GetSSHSessionByID(ctx context.Context, sessionID string) (*SSHSession, error)
 	UpdateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
 	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)

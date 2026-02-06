@@ -15,53 +15,55 @@ export namespace dto {
       this.auth = source['auth'];
     }
   }
-  export class CreateSSHSessionRequestDTO {
-    ssh_session_name: string;
-    ssh_session_ip: string;
-    ssh_session_port: number;
-    ssh_session_user: string;
+  export class CreateSessionRequestDTO {
+    name: string;
+    ip: string;
+    port: number;
+    user: string;
+    password: string;
     folder_id: string;
     key_id: string;
-    ssh_session_auth_type: string;
+    auth_type: string;
 
     static createFrom(source: any = {}) {
-      return new CreateSSHSessionRequestDTO(source);
+      return new CreateSessionRequestDTO(source);
     }
 
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
-      this.ssh_session_name = source['ssh_session_name'];
-      this.ssh_session_ip = source['ssh_session_ip'];
-      this.ssh_session_port = source['ssh_session_port'];
-      this.ssh_session_user = source['ssh_session_user'];
+      this.name = source['name'];
+      this.ip = source['ip'];
+      this.port = source['port'];
+      this.user = source['user'];
+      this.password = source['password'];
       this.folder_id = source['folder_id'];
       this.key_id = source['key_id'];
-      this.ssh_session_auth_type = source['ssh_session_auth_type'];
+      this.auth_type = source['auth_type'];
     }
   }
-  export class CreateSSHSessionResponseDTO {
+  export class CreateSessionResponseDTO {
     id: string;
-    ssh_session_name: string;
-    ssh_session_ip: string;
-    ssh_session_port: number;
-    ssh_session_user: string;
-    ssh_session_status: string;
-    ssh_session_auth_type: string;
+    name: string;
+    ip: string;
+    port: number;
+    user: string;
+    status: string;
+    auth_type: string;
     last_login: string;
 
     static createFrom(source: any = {}) {
-      return new CreateSSHSessionResponseDTO(source);
+      return new CreateSessionResponseDTO(source);
     }
 
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
       this.id = source['id'];
-      this.ssh_session_name = source['ssh_session_name'];
-      this.ssh_session_ip = source['ssh_session_ip'];
-      this.ssh_session_port = source['ssh_session_port'];
-      this.ssh_session_user = source['ssh_session_user'];
-      this.ssh_session_status = source['ssh_session_status'];
-      this.ssh_session_auth_type = source['ssh_session_auth_type'];
+      this.name = source['name'];
+      this.ip = source['ip'];
+      this.port = source['port'];
+      this.user = source['user'];
+      this.status = source['status'];
+      this.auth_type = source['auth_type'];
       this.last_login = source['last_login'];
     }
   }
@@ -98,7 +100,7 @@ export namespace dto {
     }
   }
   export class GetSessionRequestDTO {
-    session_id: string;
+    id: string;
 
     static createFrom(source: any = {}) {
       return new GetSessionRequestDTO(source);
@@ -106,17 +108,17 @@ export namespace dto {
 
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
-      this.session_id = source['session_id'];
+      this.id = source['id'];
     }
   }
   export class GetSessionResponseDTO {
     id: string;
-    ssh_session_name: string;
-    ssh_session_ip: string;
-    ssh_session_port: number;
-    ssh_session_user: string;
-    ssh_session_status: string;
-    ssh_session_auth_type: string;
+    name: string;
+    ip: string;
+    port: number;
+    user: string;
+    status: string;
+    auth_type: string;
     last_login: string;
 
     static createFrom(source: any = {}) {
@@ -126,12 +128,12 @@ export namespace dto {
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
       this.id = source['id'];
-      this.ssh_session_name = source['ssh_session_name'];
-      this.ssh_session_ip = source['ssh_session_ip'];
-      this.ssh_session_port = source['ssh_session_port'];
-      this.ssh_session_user = source['ssh_session_user'];
-      this.ssh_session_status = source['ssh_session_status'];
-      this.ssh_session_auth_type = source['ssh_session_auth_type'];
+      this.name = source['name'];
+      this.ip = source['ip'];
+      this.port = source['port'];
+      this.user = source['user'];
+      this.status = source['status'];
+      this.auth_type = source['auth_type'];
       this.last_login = source['last_login'];
     }
   }
@@ -167,12 +169,13 @@ export namespace dto {
   }
   export class UpdateSessionRequestDTO {
     id: string;
-    ssh_session_name: string;
-    ssh_session_ip: string;
-    ssh_session_port: number;
-    ssh_session_user: string;
-    ssh_session_status: string;
-    ssh_session_auth_type: string;
+    name: string;
+    password: string;
+    ip: string;
+    port: number;
+    user: string;
+    status: string;
+    auth_type: string;
 
     static createFrom(source: any = {}) {
       return new UpdateSessionRequestDTO(source);
@@ -181,22 +184,23 @@ export namespace dto {
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
       this.id = source['id'];
-      this.ssh_session_name = source['ssh_session_name'];
-      this.ssh_session_ip = source['ssh_session_ip'];
-      this.ssh_session_port = source['ssh_session_port'];
-      this.ssh_session_user = source['ssh_session_user'];
-      this.ssh_session_status = source['ssh_session_status'];
-      this.ssh_session_auth_type = source['ssh_session_auth_type'];
+      this.name = source['name'];
+      this.password = source['password'];
+      this.ip = source['ip'];
+      this.port = source['port'];
+      this.user = source['user'];
+      this.status = source['status'];
+      this.auth_type = source['auth_type'];
     }
   }
   export class UpdateSessionResponseDTO {
     id: string;
-    ssh_session_name: string;
-    ssh_session_ip: string;
-    ssh_session_port: number;
-    ssh_session_user: string;
-    ssh_session_status: string;
-    ssh_session_auth_type: string;
+    name: string;
+    ip: string;
+    port: number;
+    user: string;
+    status: string;
+    auth_type: string;
 
     static createFrom(source: any = {}) {
       return new UpdateSessionResponseDTO(source);
@@ -205,12 +209,12 @@ export namespace dto {
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
       this.id = source['id'];
-      this.ssh_session_name = source['ssh_session_name'];
-      this.ssh_session_ip = source['ssh_session_ip'];
-      this.ssh_session_port = source['ssh_session_port'];
-      this.ssh_session_user = source['ssh_session_user'];
-      this.ssh_session_status = source['ssh_session_status'];
-      this.ssh_session_auth_type = source['ssh_session_auth_type'];
+      this.name = source['name'];
+      this.ip = source['ip'];
+      this.port = source['port'];
+      this.user = source['user'];
+      this.status = source['status'];
+      this.auth_type = source['auth_type'];
     }
   }
 }
