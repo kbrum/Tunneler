@@ -4,7 +4,7 @@ import {
   CreateUser,
   LogoutUser,
   GetUser,
-} from '../../wailsjs/go/adapter/UserController';
+} from '../../wailsjs/go/controller/UserController';
 
 export async function loginUserAction(user: dto.LoginRequestDTO) {
   try {

@@ -7,8 +7,12 @@ import {
 } from '@/features/dashboard/types/session.schema';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useForm} from 'react-hook-form';
+import {useSSHSessions} from '../hooks/use-ssh';
+import {Spinner} from '@/components/ui/spinner';
 
 export function CreateSessionForm() {
+  const {createSSHSession, isCreating} = useSSHSessions();
+
   const form = useForm<SessionCreateSchema>({
     resolver: zodResolver(sessionCreateSchema),
     defaultValues: {
@@ -19,9 +23,28 @@ export function CreateSessionForm() {
     },
   });
 
+  const handleCreateSession = async (data: SessionCreateSchema) => {
+    try {
+      return await createSSHSession({
+        ssh_session_name: data.name,
+        ssh_session_ip: data.ip,
+        ssh_session_port: data.port,
+        ssh_session_user: data.user,
+        folder_id: '',
+        key_id: '',
+        ssh_session_auth_type: 'password',
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Form {...form}>
-      <form className="flex h-full w-full flex-col gap-4">
+      <form
+        onSubmit={form.handleSubmit(handleCreateSession)}
+        className="flex h-full w-full flex-col gap-4"
+      >
         <FormField
           control={form.control}
           name="ip"
@@ -50,7 +73,12 @@ export function CreateSessionForm() {
           render={({field}) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Enter the port" {...field} />
+                <Input
+                  type="number"
+                  placeholder="Enter the port"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -69,13 +97,15 @@ export function CreateSessionForm() {
             </FormItem>
           )}
         />
-
-        <Button
-          type="submit"
-          className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
-        >
-          Create Session
-        </Button>
+        <div className="flex w-full items-center justify-end">
+          <Button
+            type="submit"
+            disabled={isCreating}
+            className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
+          >
+            {isCreating ? <Spinner /> : 'Create Session'}
+          </Button>
+        </div>
       </form>
     </Form>
   );

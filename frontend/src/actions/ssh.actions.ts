@@ -5,7 +5,7 @@ import {
   GetSSHSessions,
   UpdateSSHSession,
   GetSSHSessionByID,
-} from '../../wailsjs/go/adapter/SSHController';
+} from '../../wailsjs/go/controller/SSHController';
 
 export async function createSessionAction(
   session: dto.CreateSSHSessionRequestDTO,

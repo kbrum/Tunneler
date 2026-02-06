@@ -1,8 +1,16 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {dto} from '../../../../wailsjs/go/models';
-import {createSessionAction, getSessionsAction} from '@/actions/ssh.actions';
+import {
+  createSessionAction,
+  deleteSessionAction,
+  getSessionByIDAction,
+  getSessionsAction,
+  updateSessionAction,
+} from '@/actions/ssh.actions';
 
-export function useGetSSHSessions() {
+export function useSSHSessions() {
+  const queryClient = useQueryClient();
+
   const {
     data: sshSessions,
     isLoading,
@@ -12,17 +20,15 @@ export function useGetSSHSessions() {
     queryFn: getSessionsAction,
   });
 
-  return {
-    sshSessions,
-    isLoading,
-    isError,
-  };
-}
+  const getSessionByID = useMutation({
+    mutationFn: (id: string) =>
+      getSessionByIDAction(new dto.GetSessionRequestDTO(id)),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({queryKey: ['sshSession']});
+    },
+  });
 
-export function useCreateSSHSession() {
-  const queryClient = useQueryClient();
-
-  const create = useMutation({
+  const createMutation = useMutation({
     mutationFn: (props: {
       ssh_session_name: string;
       ssh_session_ip: string;
@@ -37,9 +43,43 @@ export function useCreateSSHSession() {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: (props: {
+      id: string;
+      ssh_session_name: string;
+      ssh_session_ip: string;
+      ssh_session_port: number;
+      ssh_session_user: string;
+      ssh_session_status: string;
+      ssh_session_auth_type: string;
+    }) => updateSessionAction(new dto.UpdateSessionRequestDTO(props)),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({queryKey: ['sshSession']});
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteSessionAction(id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({queryKey: ['sshSession']});
+    },
+  });
+
   return {
-    createSSHSession: create.mutateAsync,
-    isLoadingCreate: create.isPending,
-    isErrorCreate: create.isError,
+    sshSessions,
+    isLoading,
+    isError,
+    getSessionByID: getSessionByID.mutateAsync,
+    isGettingByID: getSessionByID.isPending,
+    isErrorGetByID: getSessionByID.isError,
+    createSSHSession: createMutation.mutateAsync,
+    isCreating: createMutation.isPending,
+    isErrorCreate: createMutation.isError,
+    updateSession: updateMutation.mutateAsync,
+    isUpdating: updateMutation.isPending,
+    isErrorUpdate: updateMutation.isError,
+    deleteSSHSession: deleteMutation.mutateAsync,
+    isDeleting: deleteMutation.isPending,
+    isErrorDelete: deleteMutation.isError,
   };
 }
