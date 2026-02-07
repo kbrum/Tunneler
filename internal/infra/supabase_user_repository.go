@@ -19,6 +19,18 @@ func NewSupabaseUserRepository(client *supabase.Client) *SupabaseUserRepository 
 	}
 }
 
+func (s *SupabaseUserRepository) GetUser(ctx context.Context, token string) (*domain.User, error) {
+	user, err := s.client.Auth.WithToken(token).GetUser()
+	if err != nil {
+		return nil, err
+	}
+
+	res := &domain.User{
+		ID: user.ID.String(),
+	}
+	return res, nil
+}
+
 func (s *SupabaseUserRepository) Create(ctx context.Context, user *domain.User) (*domain.User, error) {
 	req := types.SignupRequest{
 		Email:    user.Email,
@@ -37,18 +49,6 @@ func (s *SupabaseUserRepository) Create(ctx context.Context, user *domain.User) 
 		ID:    data.User.ID.String(),
 		Name:  data.User.UserMetadata["name"].(string),
 		Email: data.User.Email,
-	}
-	return res, nil
-}
-
-func (s *SupabaseUserRepository) GetUser(ctx context.Context, token string) (*domain.User, error) {
-	user, err := s.client.Auth.WithToken(token).GetUser()
-	if err != nil {
-		return nil, err
-	}
-
-	res := &domain.User{
-		ID: user.ID.String(),
 	}
 	return res, nil
 }
