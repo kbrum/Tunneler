@@ -16,7 +16,7 @@ import {useForm} from 'react-hook-form';
 import {useSSHSessions} from '../hooks/use-ssh';
 import {Spinner} from '@/components/ui/spinner';
 import {toast} from 'sonner';
-import {useSessionStore} from '@/features/dashboard/store/session.store';
+import {useSessionStore} from '@/features/dashboard/stores/session.store';
 
 export function SessionForm() {
   const {createSSHSession, isCreating, isUpdating} = useSSHSessions();

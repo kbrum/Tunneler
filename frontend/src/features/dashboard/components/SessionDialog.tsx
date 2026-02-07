@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import {SessionForm} from '@/features/dashboard/components/SessionForm';
-import {useSessionStore} from '../store/session.store';
+import {useSessionStore} from '../stores/session.store';
 
 export function CreateSessionDialog() {
   const {isDialogOpen, setIsDialogOpen} = useSessionStore();

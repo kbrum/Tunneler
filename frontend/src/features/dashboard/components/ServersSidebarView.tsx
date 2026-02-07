@@ -1,9 +1,48 @@
-import {Card} from '@/components/ui/card';
+import {Server} from 'lucide-react';
 
-export function ServersSidebarTreeView() {
+import {Badge} from '@/components/ui/badge';
+import {Card} from '@/components/ui/card';
+import {Spinner} from '@/components/ui/spinner';
+import {useSSHSessions} from '@/features/dashboard/hooks/use-ssh';
+
+export function ServersSidebarView() {
+  const {sshSessions, isLoading, isError} = useSSHSessions();
+
   return (
-    <div className="flex w-full flex-col">
-      <Card></Card>
+    <div className="flex w-full flex-col gap-2 px-2">
+      {isError ? (
+        <span className="text-destructive px-2 text-sm">
+          Error loading sessions
+        </span>
+      ) : isLoading ? (
+        <div className="flex justify-center p-4">
+          <Spinner />
+        </div>
+      ) : (
+        sshSessions?.map((session) => (
+          <Card
+            key={session.id}
+            className="group bg-sidebar-accent/50 hover:bg-sidebar-accent flex flex-row items-center gap-3 rounded-lg border-transparent p-2.5 shadow-none transition-all"
+          >
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[#2f3191] text-white">
+              <Server className="size-4" />
+            </div>
+
+            <div className="flex min-w-0 flex-1 flex-col">
+              <span className="text-sidebar-foreground truncate text-sm font-medium">
+                {session.name || session.ip}
+              </span>
+            </div>
+
+            <Badge
+              variant="outline"
+              className="border-sidebar-border/50 text-muted-foreground shrink-0 text-[10px] font-normal uppercase"
+            >
+              {session.status || 'Offline'}
+            </Badge>
+          </Card>
+        ))
+      )}
     </div>
   );
 }
