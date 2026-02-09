@@ -3,14 +3,16 @@ export type SessionStore = {
   setIsEditing: (value: boolean) => void;
   isDialogOpen: boolean;
   setIsDialogOpen: (value: boolean) => void;
+  isSessionMenuDialogOpen: boolean;
+  setIsSessionMenuDialogOpen: (value: boolean) => void;
   id: string;
   setID: (value: string) => void;
   ip: string;
   setIP: (value: string) => void;
   user: string;
   setUser: (value: string) => void;
-  port: string;
-  setPort: (value: string) => void;
+  port: number;
+  setPort: (value: number) => void;
   label: string;
   setLabel: (value: string) => void;
 };

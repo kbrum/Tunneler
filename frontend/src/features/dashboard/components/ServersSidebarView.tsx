@@ -4,8 +4,11 @@ import {Badge} from '@/components/ui/badge';
 import {Card} from '@/components/ui/card';
 import {Spinner} from '@/components/ui/spinner';
 import {useSSHSessions} from '@/features/dashboard/hooks/use-ssh';
+import {useSessionStore} from '@/features/dashboard/stores/session.store';
 
 export function ServersSidebarView() {
+  const {setIsSessionMenuDialogOpen, setID, setUser, setLabel, setPort, setIP} =
+    useSessionStore();
   const {sshSessions, isLoading, isError} = useSSHSessions();
 
   return (
@@ -21,8 +24,16 @@ export function ServersSidebarView() {
       ) : (
         sshSessions?.map((session) => (
           <Card
+            onDoubleClick={() => {
+              setID(session.id);
+              setUser(session.user);
+              setLabel(session.name);
+              setPort(session.port);
+              setIP(session.ip);
+              return setIsSessionMenuDialogOpen(true);
+            }}
             key={session.id}
-            className="group bg-sidebar-accent/50 hover:bg-sidebar-accent flex flex-row items-center gap-3 rounded-lg border-transparent p-2.5 shadow-none transition-all"
+            className="group bg-sidebar-accent/50 hover:bg-sidebar-accent flex cursor-pointer flex-row items-center gap-3 rounded-lg border-transparent p-2.5 shadow-none transition-all"
           >
             <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[#2f3191] text-white">
               <Server className="size-4" />

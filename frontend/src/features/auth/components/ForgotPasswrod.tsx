@@ -7,14 +7,14 @@ import {
 } from '@/components/ui/card';
 import {Form, useForm} from 'react-hook-form';
 import {Link} from 'react-router-dom';
-import {
-  resetPasswordSchema,
-  type ResetPasswordSchema,
-} from '@/features/auth/types/auth.schema';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {EmailInput} from '@/components/EmailInput';
 import {FormControl, FormField, FormItem} from '@/components/ui/form';
 import {Button} from '@/components/ui/button';
+import {
+  resetPasswordSchema,
+  type ResetPasswordSchema,
+} from '../types/auth.schema';
 
 export function ForgotPassword() {
   const form = useForm<ResetPasswordSchema>({
