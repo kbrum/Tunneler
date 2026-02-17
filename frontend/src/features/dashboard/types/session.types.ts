@@ -17,4 +17,8 @@ export type SessionStore = {
   setLabel: (value: string) => void;
   privateKey: string;
   setPrivateKey: (value: string) => void;
+  status: string;
+  setStatus: (value: string) => void;
+  auth_type: string;
+  setAuthType: (value: string) => void;
 };

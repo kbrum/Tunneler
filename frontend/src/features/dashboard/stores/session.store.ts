@@ -21,4 +21,8 @@ export const useSessionStore = create<SessionStore>((set) => ({
   setLabel: (value: string) => set({label: value}),
   privateKey: '',
   setPrivateKey: (value: string) => set({privateKey: value}),
+  status: '',
+  setStatus: (value: string) => set({status: value}),
+  auth_type: '',
+  setAuthType: (value: string) => set({auth_type: value}),
 }));

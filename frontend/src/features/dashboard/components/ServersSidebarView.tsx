@@ -8,8 +8,16 @@ import {useSessionStore} from '@/features/dashboard/stores/session.store';
 import {Button} from '@/components/ui/button';
 
 export function ServersSidebarView() {
-  const {setIsSessionMenuDialogOpen, setID, setUser, setLabel, setPort, setIP} =
-    useSessionStore();
+  const {
+    setIsSessionMenuDialogOpen,
+    setID,
+    setUser,
+    setLabel,
+    setPort,
+    setIP,
+    setStatus,
+    setAuthType,
+  } = useSessionStore();
   const {sshSessions, isLoading, isError, refetch} = useSSHSessions();
 
   return (
@@ -37,6 +45,8 @@ export function ServersSidebarView() {
               setLabel(session.name);
               setPort(session.port);
               setIP(session.ip);
+              setStatus(session.status);
+              setAuthType(session.auth_type);
               return setIsSessionMenuDialogOpen(true);
             }}
             key={session.id}

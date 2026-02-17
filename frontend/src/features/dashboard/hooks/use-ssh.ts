@@ -49,6 +49,7 @@ export function useSSHSessions() {
     mutationFn: (props: {
       id: string;
       name: string;
+      password: string;
       ip: string;
       port: number;
       user: string;

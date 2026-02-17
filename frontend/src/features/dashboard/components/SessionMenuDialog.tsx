@@ -6,14 +6,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {Textarea} from '@/components/ui/textarea';
 import {useSessionStore} from '@/features/dashboard/stores/session.store';
 import {useState} from 'react';
+import {useSSHSessions} from '@/features/dashboard/hooks/use-ssh';
+import {Spinner} from '@/components/ui/spinner';
 
 export function SessionMenuDialog() {
   const {
     isSessionMenuDialogOpen,
     setIsSessionMenuDialogOpen,
+    id,
     ip,
     setIP,
     port,
@@ -22,13 +24,27 @@ export function SessionMenuDialog() {
     setUser,
     label,
     setLabel,
-    privateKey,
-    setPrivateKey,
     isEditing,
     setIsEditing,
+    status,
+    auth_type,
   } = useSessionStore();
+  const {updateSSHSession, isUpdating} = useSSHSessions();
 
   const [password, setPassword] = useState('');
+
+  const handleUpdate = () => {
+    updateSSHSession({
+      id,
+      name: label,
+      ip: ip,
+      port: port,
+      user: user,
+      password: password,
+      status,
+      auth_type,
+    });
+  };
 
   return (
     <Dialog
@@ -89,7 +105,7 @@ export function SessionMenuDialog() {
                     <input
                       type="text"
                       value={port}
-                      onChange={(e) => setPort(e.target.value)}
+                      onChange={(e) => setPort(Number(e.target.value))}
                       className="w-full border-none bg-transparent text-center outline-none"
                     />
                   ) : (
@@ -124,7 +140,7 @@ export function SessionMenuDialog() {
                 Remote Password
               </span>
               <Card>
-                <CardContent className="flex min-h-[50px] items-center justify-center p-3">
+                <CardContent className="flex min-h-12.5 items-center justify-center p-3">
                   {isEditing ? (
                     <input
                       type="password"
@@ -139,33 +155,21 @@ export function SessionMenuDialog() {
               </Card>
             </div>
           </div>
-          <div className="flex w-full flex-col gap-1">
-            <span className="text-muted-foreground ml-1 text-sm font-medium">
-              Private Key
-            </span>
-            <Card className="min-h-30">
-              <CardContent className="flex h-full p-3">
-                {isEditing ? (
-                  <Textarea
-                    value={privateKey}
-                    onChange={(e) => setPrivateKey(e.target.value)}
-                    className="min-h-25 w-full resize-none border-none bg-transparent focus-visible:ring-0"
-                  />
-                ) : (
-                  <span className="w-full break-all">{privateKey}</span>
-                )}
-              </CardContent>
-            </Card>
-          </div>
         </div>
         <div className="flex w-full flex-row items-center justify-end gap-3">
           {isEditing ? (
-            <Button variant="outline" onClick={() => setIsEditing(false)}>
-              Salvar
+            <Button variant="outline" onClick={handleUpdate}>
+              {isUpdating ? (
+                <span>
+                  <Spinner />
+                </span>
+              ) : (
+                <span>Save</span>
+              )}
             </Button>
           ) : (
             <Button variant="outline" onClick={() => setIsEditing(true)}>
-              Editar
+              Edit
             </Button>
           )}
           <Button
