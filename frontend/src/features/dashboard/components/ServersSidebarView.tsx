@@ -1,21 +1,28 @@
-import {Server} from 'lucide-react';
+import {RefreshCcw, Server} from 'lucide-react';
 
 import {Badge} from '@/components/ui/badge';
 import {Card} from '@/components/ui/card';
 import {Spinner} from '@/components/ui/spinner';
 import {useSSHSessions} from '@/features/dashboard/hooks/use-ssh';
 import {useSessionStore} from '@/features/dashboard/stores/session.store';
+import {Button} from '@/components/ui/button';
 
 export function ServersSidebarView() {
   const {setIsSessionMenuDialogOpen, setID, setUser, setLabel, setPort, setIP} =
     useSessionStore();
-  const {sshSessions, isLoading, isError} = useSSHSessions();
+  const {sshSessions, isLoading, isError, refetch} = useSSHSessions();
 
   return (
     <div className="flex w-full flex-col gap-2 px-2">
       {isError ? (
         <span className="text-destructive px-2 text-sm">
           Error loading sessions
+          <Button
+            onClick={() => refetch()}
+            className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
+          >
+            <RefreshCcw />
+          </Button>
         </span>
       ) : isLoading ? (
         <div className="flex justify-center p-4">
@@ -24,7 +31,7 @@ export function ServersSidebarView() {
       ) : (
         sshSessions?.map((session) => (
           <Card
-            onDoubleClick={() => {
+            onClick={() => {
               setID(session.id);
               setUser(session.user);
               setLabel(session.name);

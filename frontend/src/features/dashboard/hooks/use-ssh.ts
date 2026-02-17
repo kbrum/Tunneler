@@ -15,6 +15,7 @@ export function useSSHSessions() {
     data: sshSessions,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ['sshSession'],
     queryFn: getSessionsAction,
@@ -70,6 +71,7 @@ export function useSSHSessions() {
     sshSessions,
     isLoading,
     isError,
+    refetch,
     getSessionByID: getSessionByID.mutateAsync,
     isLoadingGetByID: getSessionByID.isPending,
     isErrorGetByID: getSessionByID.isError,

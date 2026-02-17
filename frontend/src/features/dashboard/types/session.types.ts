@@ -15,4 +15,6 @@ export type SessionStore = {
   setPort: (value: number) => void;
   label: string;
   setLabel: (value: string) => void;
+  privateKey: string;
+  setPrivateKey: (value: string) => void;
 };

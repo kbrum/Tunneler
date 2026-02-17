@@ -19,4 +19,6 @@ export const useSessionStore = create<SessionStore>((set) => ({
   setPort: (value: number) => set({port: value}),
   label: '',
   setLabel: (value: string) => set({label: value}),
+  privateKey: '',
+  setPrivateKey: (value: string) => set({privateKey: value}),
 }));
