@@ -28,4 +28,31 @@ export const sessionCreateSchema = z.object({
     }, 'A porta deve estar entre 1 e 65535'),
 });
 
+export const sessionUpdateSchema = z.object({
+  name: z.string().max(100, 'Session name must have at most 100 characters'),
+  user: z
+    .string()
+    .min(2, 'Remote user must have at least 2 characters')
+    .max(100, 'Remote user must have at most 100 characters'),
+  password: z
+    .string()
+    .max(200, 'Password must have at most 200 characters')
+    .optional()
+    .or(z.literal('')),
+  ip: z
+    .string()
+    .min(7, 'IP address is too short')
+    .max(15, 'IP address is too long')
+    .regex(/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/, 'Invalid IP address format'),
+  port: z
+    .string()
+    .min(1, 'Port is required')
+    .regex(/^\d+$/, 'Port must contain only numbers')
+    .refine((value) => {
+      const parsedPort = Number.parseInt(value, 10);
+      return parsedPort >= 1 && parsedPort <= 65535;
+    }, 'Port must be between 1 and 65535'),
+});
+
 export type SessionCreateSchema = z.infer<typeof sessionCreateSchema>;
+export type SessionUpdateSchema = z.infer<typeof sessionUpdateSchema>;
