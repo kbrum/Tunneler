@@ -18,11 +18,16 @@ import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
 import {Separator} from '@/components/ui/separator';
 import {Spinner} from '@/components/ui/spinner';
-import {useSessionMenuForm} from '@/features/dashboard/hooks/use-session-menu-form';
 import {useSSHSessions} from '@/features/dashboard/hooks/use-ssh';
 import {useSessionStore} from '@/features/dashboard/stores/session.store';
-import type {SessionUpdateSchema} from '@/features/dashboard/types/session.schema';
+import {
+  sessionUpdateSchema,
+  type SessionUpdateSchema,
+} from '@/features/dashboard/types/session.schema';
+import {zodResolver} from '@hookform/resolvers/zod';
 import {Pencil, Save, Server, Shield, Wifi} from 'lucide-react';
+import {useEffect} from 'react';
+import {useForm} from 'react-hook-form';
 import {toast} from 'sonner';
 
 export function SessionMenuDialog() {
@@ -43,9 +48,32 @@ export function SessionMenuDialog() {
     status,
     auth_type,
   } = useSessionStore();
-
-  const form = useSessionMenuForm();
   const {updateSSHSession, isUpdating} = useSSHSessions();
+
+  const form = useForm<SessionUpdateSchema>({
+    resolver: zodResolver(sessionUpdateSchema),
+    defaultValues: {
+      name: '',
+      ip: '',
+      port: '22',
+      user: '',
+      password: '',
+    },
+  });
+
+  useEffect(() => {
+    if (!isSessionMenuDialogOpen) {
+      return;
+    }
+
+    form.reset({
+      name: label ?? '',
+      ip: ip ?? '',
+      port: port ? String(port) : '22',
+      user: user ?? '',
+      password: '',
+    });
+  }, [form, ip, isSessionMenuDialogOpen, label, port, user]);
 
   const handleDialogOpenChange = (isOpen: boolean) => {
     setIsSessionMenuDialogOpen(isOpen);
