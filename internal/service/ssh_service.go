@@ -2,10 +2,12 @@ package service
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"tunneler/internal/domain"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -106,13 +108,31 @@ func (s *SSHService) VerifyPassword(hashedPassword string, password string) (boo
 	return true, nil
 }
 
+func validateSessionID(sessionID string) (string, error) {
+	trimmedSessionID := strings.TrimSpace(sessionID)
+	if trimmedSessionID == "" {
+		return "", domain.EmptySessionIDError
+	}
+
+	if _, err := uuid.Parse(trimmedSessionID); err != nil {
+		return "", domain.ErrInvalidSessionID
+	}
+
+	return trimmedSessionID, nil
+}
+
 func (s *SSHService) GetSSHSessionByID(ctx context.Context, sessionID string) (*domain.SSHSession, error) {
 	localSession, err := s.ensureValidSession(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := s.sshRepo.GetSSHSessionByID(ctx, localSession.AccessToken, sessionID)
+	validatedSessionID, err := validateSessionID(sessionID)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := s.sshRepo.GetSSHSessionByID(ctx, localSession.AccessToken, validatedSessionID)
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +146,21 @@ func (s *SSHService) UpdateSSHSession(ctx context.Context, sshSession *domain.SS
 		return nil, err
 	}
 
+	validatedSessionID, err := validateSessionID(sshSession.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	sshSession.ID = validatedSessionID
 	sshSession.UserID = localSession.User.ID
+
+	if sshSession.Password != "" {
+		hashedPassword, err := s.HashPassword(sshSession.Password)
+		if err != nil {
+			return nil, err
+		}
+		sshSession.Password = hashedPassword
+	}
 
 	if err := domain.ValidadeSSHSession(sshSession); err != nil {
 		return nil, err
@@ -146,7 +180,12 @@ func (s *SSHService) DeleteSSHSession(ctx context.Context, sessionID string) (bo
 		return false, err
 	}
 
-	bool, err := s.sshRepo.DeleteSSHSession(ctx, localSession.AccessToken, sessionID)
+	validatedSessionID, err := validateSessionID(sessionID)
+	if err != nil {
+		return false, err
+	}
+
+	bool, err := s.sshRepo.DeleteSSHSession(ctx, localSession.AccessToken, validatedSessionID)
 	if err != nil {
 		return bool, err
 	}

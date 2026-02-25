@@ -81,11 +81,13 @@ type SSHSessionService interface {
 }
 
 var (
-	EmptyIPError       = errors.New("IP address cannot be empty")
-	EmptyPortError     = errors.New("Port cannot be empty")
-	EmptyUserIDError   = errors.New("User ID cannot be empty")
-	ErrInvalidStatus   = errors.New("Invalid status")
-	ErrInvalidAuthType = errors.New("Invalid auth type")
+	EmptyIPError        = errors.New("IP address cannot be empty")
+	EmptyPortError      = errors.New("Port cannot be empty")
+	EmptyUserIDError    = errors.New("User ID cannot be empty")
+	EmptySessionIDError = errors.New("Session ID cannot be empty")
+	ErrInvalidSessionID = errors.New("Invalid session ID")
+	ErrInvalidStatus    = errors.New("Invalid status")
+	ErrInvalidAuthType  = errors.New("Invalid auth type")
 )
 
 func ValidadeIP(sshSession *SSHSession) error {

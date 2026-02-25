@@ -154,7 +154,7 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessionByID(ctx context.Context, to
 		return nil, err
 	}
 
-	var data SSHSessionSchema
+	var data []SSHSessionSchema
 
 	_, err = client.From("ssh_sessions").
 		Select("*", "estimated", false).
@@ -164,15 +164,19 @@ func (r *SupabaseSSHSessionRepository) GetSSHSessionByID(ctx context.Context, to
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, nil
+	}
+
 	res := &domain.SSHSession{
-		ID:       data.ID,
-		Name:     data.Name,
-		IP:       data.IP,
-		Port:     data.Port,
-		User:     data.User,
-		Status:   data.Status,
-		AuthType: data.AuthType,
-		KeyID:    data.KeyID,
+		ID:       data[0].ID,
+		Name:     data[0].Name,
+		IP:       data[0].IP,
+		Port:     data[0].Port,
+		User:     data[0].User,
+		Status:   data[0].Status,
+		AuthType: data[0].AuthType,
+		KeyID:    data[0].KeyID,
 	}
 
 	return res, nil
@@ -184,7 +188,7 @@ func (r *SupabaseSSHSessionRepository) GetPassword(ctx context.Context, token st
 		return "", err
 	}
 
-	var data SSHSessionSchema
+	var data []SSHSessionSchema
 
 	_, err = client.From("ssh_sessions").
 		Select("password", "estimated", false).
@@ -194,7 +198,11 @@ func (r *SupabaseSSHSessionRepository) GetPassword(ctx context.Context, token st
 		return "", err
 	}
 
-	return data.Password, nil
+	if len(data) == 0 {
+		return "", nil
+	}
+
+	return data[0].Password, nil
 }
 
 func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, token string, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
@@ -203,33 +211,55 @@ func (r *SupabaseSSHSessionRepository) UpdateSSHSession(ctx context.Context, tok
 		return nil, err
 	}
 
-	SSHSessionDB := SSHSessionSchema{
-		ID:       sshSession.ID,
-		Name:     sshSession.Name,
-		IP:       sshSession.IP,
-		Password: sshSession.Password,
-		Port:     sshSession.Port,
-		User:     sshSession.User,
-		KeyID:    sshSession.KeyID,
+	sshSessionDB := map[string]any{
+		"session_name": sshSession.Name,
+		"session_ip":   sshSession.IP,
+		"ssh_port":     sshSession.Port,
+		"remote_user":  sshSession.User,
+		"status":       sshSession.Status,
+		"auth_type":    sshSession.AuthType,
 	}
 
-	var data SSHSessionSchema
+	if sshSession.Password != "" {
+		sshSessionDB["password"] = sshSession.Password
+	}
+
+	if sshSession.KeyID != "" {
+		sshSessionDB["key_id"] = sshSession.KeyID
+	}
+
+	var data []SSHSessionSchema
 
 	_, err = client.From("ssh_sessions").
-		Update(SSHSessionDB, "representation", "estimated").
+		Update(sshSessionDB, "representation", "estimated").
 		Eq("id", sshSession.ID).
 		ExecuteToWithContext(ctx, &data)
 	if err != nil {
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return &domain.SSHSession{
+			ID:       sshSession.ID,
+			Name:     sshSession.Name,
+			IP:       sshSession.IP,
+			Port:     sshSession.Port,
+			User:     sshSession.User,
+			Status:   sshSession.Status,
+			AuthType: sshSession.AuthType,
+			KeyID:    sshSession.KeyID,
+		}, nil
+	}
+
 	res := &domain.SSHSession{
-		ID:    data.ID,
-		Name:  data.Name,
-		IP:    data.IP,
-		Port:  data.Port,
-		User:  data.User,
-		KeyID: data.KeyID,
+		ID:       data[0].ID,
+		Name:     data[0].Name,
+		IP:       data[0].IP,
+		Port:     data[0].Port,
+		User:     data[0].User,
+		Status:   data[0].Status,
+		AuthType: data[0].AuthType,
+		KeyID:    data[0].KeyID,
 	}
 
 	return res, nil

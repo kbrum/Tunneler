@@ -8,6 +8,11 @@
 				"CONTEXT7_API_KEY": "ctx7sk-edd9ea4a-eb45-4886-9aa8-fa7148d0665b"
 			},
 			"enabled": true
+		},
+		"supabase": {
+			"type": "remote",
+			"url": "https://mcp.supabase.com/mcp",
+			"enabled": true
 		}
 	}
 }

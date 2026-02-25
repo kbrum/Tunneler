@@ -113,15 +113,23 @@ export function SessionMenuDialog() {
   };
 
   const handleUpdate = async (data: SessionUpdateSchema) => {
+    const sanitizedID = id.trim();
     const sanitizedName = data.name.trim();
     const sanitizedIP = data.ip.trim();
     const sanitizedUser = data.user.trim();
     const sanitizedPassword = data.password?.trim() ?? '';
     const parsedPort = Number.parseInt(data.port, 10);
 
+    if (!sanitizedID) {
+      toast.error(
+        'Unable to update: invalid session id. Reopen the session and try again.',
+      );
+      return;
+    }
+
     try {
       await updateSSHSession({
-        id,
+        id: sanitizedID,
         name: sanitizedName,
         ip: sanitizedIP,
         port: parsedPort,
