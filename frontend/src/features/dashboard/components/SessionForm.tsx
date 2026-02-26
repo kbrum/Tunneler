@@ -4,9 +4,11 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
+import {Separator} from '@/components/ui/separator';
 import {
   sessionCreateSchema,
   type SessionCreateSchema,
@@ -17,6 +19,7 @@ import {useSSHSessions} from '../hooks/use-ssh';
 import {Spinner} from '@/components/ui/spinner';
 import {toast} from 'sonner';
 import {useSessionStore} from '@/features/dashboard/stores/session.store';
+import {LockKeyhole, User, Wifi} from 'lucide-react';
 
 export function SessionForm() {
   const {createSSHSession, isCreating, isUpdating} = useSSHSessions();
@@ -34,20 +37,30 @@ export function SessionForm() {
   });
 
   const handleCreate = async (data: SessionCreateSchema) => {
-    console.log('Submitting form data:', data);
+    const sanitizedName = data.name?.trim() ?? '';
+    const sanitizedIP = data.ip.trim();
+    const sanitizedUser = data.user.trim();
+    const parsedPort = Number.parseInt(data.port, 10);
+
     try {
       await createSSHSession({
-        name: data.name ?? '',
-        ip: data.ip,
-        user: data.user,
+        name: sanitizedName,
+        ip: sanitizedIP,
+        user: sanitizedUser,
         password: data.password,
-        port: Number(data.port),
+        port: parsedPort,
         auth_type: 'password',
         folder_id: '',
         key_id: '',
       });
-      console.log('Session created successfully');
       toast.success('Session created successfully');
+      form.reset({
+        name: '',
+        user: '',
+        password: '',
+        ip: '',
+        port: '22',
+      });
       setIsDialogOpen(false);
     } catch (error) {
       console.error('Error creating session:', error);
@@ -59,77 +72,145 @@ export function SessionForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleCreate)}
-        className="flex h-full w-full flex-col gap-4"
+        className="space-y-0"
+        noValidate
       >
-        <FormField
-          control={form.control}
-          name="ip"
-          render={({field}) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Enter the IP of the server" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="user"
-          render={({field}) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Enter the remote user" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({field}) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Enter the password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="port"
-          render={({field}) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Enter the port" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="name"
-          render={({field}) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder="Enter the label of the session (optional)"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex w-full items-center justify-end">
+        <div className="space-y-5 p-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel className="text-muted-foreground text-xs uppercase">
+                  Session Name (Optional)
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Example: Production API"
+                    className="h-10"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="ip"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel className="text-muted-foreground flex items-center gap-2 text-xs uppercase">
+                    <Wifi className="size-3.5" />
+                    IP Address
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="192.168.0.10"
+                      className="h-10"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="port"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel className="text-muted-foreground text-xs uppercase">
+                    Port
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="22"
+                      inputMode="numeric"
+                      className="h-10"
+                      {...field}
+                      onChange={(event) => {
+                        const onlyNumbers = event.target.value.replace(
+                          /\D/g,
+                          '',
+                        );
+                        field.onChange(onlyNumbers);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="user"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel className="text-muted-foreground flex items-center gap-2 text-xs uppercase">
+                    <User className="size-3.5" />
+                    Remote User
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="root"
+                      autoComplete="off"
+                      className="h-10"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel className="text-muted-foreground flex items-center gap-2 text-xs uppercase">
+                    <LockKeyhole className="size-3.5" />
+                    Remote Password
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      autoComplete="new-password"
+                      className="h-10"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="flex items-center justify-end p-6 pt-4">
           <Button
             type="submit"
-            className="bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
+            className="min-w-36 bg-[#2f3191] font-semibold text-[#ffffff] hover:bg-[#2f3191]/60"
+            disabled={isCreating || isUpdating}
           >
-            {isCreating || isUpdating ? <Spinner /> : 'Create Session'}
+            {isCreating || isUpdating ? (
+              <>
+                <Spinner />
+                Creating...
+              </>
+            ) : (
+              'Create Session'
+            )}
           </Button>
         </div>
       </form>

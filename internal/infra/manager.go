@@ -9,10 +9,11 @@ import (
 )
 
 type InfraManager struct {
-	Client          *supabase.Client
-	UserInfra       domain.UserRepository
-	SSHSessionInfra domain.SSHSessionRepository
-	SessionInfra    domain.SessionRepository
+	Client             *supabase.Client
+	UserInfra          domain.UserRepository
+	SSHSessionInfra    domain.SSHSessionRepository
+	SessionInfra       domain.SessionRepository
+	SSHConnectionInfra domain.SSHConnectionGateway
 }
 
 func NewInfraManager(db *sql.DB, client *supabase.Client) *InfraManager {

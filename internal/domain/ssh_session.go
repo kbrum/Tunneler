@@ -80,6 +80,11 @@ type SSHSessionService interface {
 	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)
 }
 
+type SSHConnectionGateway interface {
+	ConnectSession(ctx context.Context, sessionID string) error
+	DisconnectSession(ctx context.Context, sessionID string) error
+}
+
 var (
 	EmptyIPError        = errors.New("IP address cannot be empty")
 	EmptyPortError      = errors.New("Port cannot be empty")
