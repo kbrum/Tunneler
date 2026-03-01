@@ -3,6 +3,8 @@ package main
 import (
 	"embed"
 	"log"
+	"log/slog"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/wailsapp/wails/v2"
@@ -33,7 +35,9 @@ func main() {
 		log.Fatal("Error creating supabase client:", err)
 	}
 
-	infraManager := infra.NewInfraManager(db, client)
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+
+	infraManager := infra.NewInfraManager(db, client, logger)
 	serviceManager := service.NewServiceManager(infraManager)
 	controllerManager := controller.NewControllerManager(serviceManager)
 	app := NewApp(controllerManager)

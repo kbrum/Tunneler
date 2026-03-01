@@ -2,6 +2,7 @@ package infra
 
 import (
 	"database/sql"
+	"log/slog"
 
 	"tunneler/internal/domain"
 
@@ -16,11 +17,12 @@ type InfraManager struct {
 	SSHConnectionInfra domain.SSHConnectionGateway
 }
 
-func NewInfraManager(db *sql.DB, client *supabase.Client) *InfraManager {
+func NewInfraManager(db *sql.DB, client *supabase.Client, logger *slog.Logger) *InfraManager {
 	return &InfraManager{
-		Client:          client,
-		UserInfra:       NewSupabaseUserRepository(client),
-		SSHSessionInfra: NewSupabaseSSHSessionRepository(client),
-		SessionInfra:    NewSqliteSessionRepository(db),
+		Client:             client,
+		UserInfra:          NewSupabaseUserRepository(client),
+		SSHSessionInfra:    NewSupabaseSSHSessionRepository(client),
+		SessionInfra:       NewSqliteSessionRepository(db),
+		SSHConnectionInfra: NewSSHConnectionGateway(logger),
 	}
 }
