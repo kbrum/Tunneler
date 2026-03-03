@@ -3,20 +3,14 @@
 import {dto} from '../models';
 import {context} from '../models';
 
-export function CreateSSHSession(
-  arg1: dto.CreateSessionRequestDTO,
-): Promise<dto.CreateSessionResponseDTO>;
+export function CreateSSHSession(arg1:dto.CreateSessionRequestDTO):Promise<dto.CreateSessionResponseDTO>;
 
-export function DeleteSSHSession(arg1: string): Promise<boolean>;
+export function DeleteSSHSession(arg1:string):Promise<boolean>;
 
-export function GetSSHSessionByID(
-  arg1: dto.GetSessionRequestDTO,
-): Promise<dto.GetSessionResponseDTO>;
+export function GetSSHSessionByID(arg1:dto.GetSessionRequestDTO):Promise<dto.GetSessionResponseDTO>;
 
-export function GetSSHSessions(): Promise<Array<dto.GetSessionResponseDTO>>;
+export function GetSSHSessions():Promise<Array<dto.GetSessionResponseDTO>>;
 
-export function Startup(arg1: context.Context): Promise<void>;
+export function Startup(arg1:context.Context):Promise<void>;
 
-export function UpdateSSHSession(
-  arg1: dto.UpdateSessionRequestDTO,
-): Promise<dto.UpdateSessionResponseDTO>;
+export function UpdateSSHSession(arg1:dto.UpdateSessionRequestDTO):Promise<dto.UpdateSessionResponseDTO>;

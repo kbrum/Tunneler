@@ -3,16 +3,12 @@
 import {dto} from '../models';
 import {context} from '../models';
 
-export function CreateUser(
-  arg1: dto.CreateUserRequestDTO,
-): Promise<dto.CreateUserResponseDTO>;
+export function CreateUser(arg1:dto.CreateUserRequestDTO):Promise<dto.CreateUserResponseDTO>;
 
-export function GetUser(): Promise<dto.AuthStatusResponseDTO>;
+export function GetUser():Promise<dto.AuthStatusResponseDTO>;
 
-export function LoginUser(
-  arg1: dto.LoginRequestDTO,
-): Promise<dto.LoginResponseDTO>;
+export function LoginUser(arg1:dto.LoginRequestDTO):Promise<dto.LoginResponseDTO>;
 
-export function LogoutUser(): Promise<void>;
+export function LogoutUser():Promise<void>;
 
-export function Startup(arg1: context.Context): Promise<void>;
+export function Startup(arg1:context.Context):Promise<void>;
