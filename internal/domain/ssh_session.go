@@ -63,6 +63,7 @@ type SSHSession struct {
 
 type SSHSessionRepository interface {
 	CreateSSHSession(ctx context.Context, token string, sshSession *SSHSession, userID string, hashedPassword string, keyID string) (*SSHSession, error)
+	CreateKeySalt(ctx context.Context, size int) ([]byte, error)
 	GetSSHSessions(ctx context.Context, token string, userID string) ([]*SSHSession, error)
 	GetSSHSessionByID(ctx context.Context, token string, sessionID string) (*SSHSession, error)
 	GetPassword(ctx context.Context, token string, sessionID string) (string, error)
