@@ -62,7 +62,7 @@ type SSHSession struct {
 }
 
 type SSHSessionRepository interface {
-	CreateSSHSession(ctx context.Context, token string, sshSession *SSHSession, userID string, hashedPassword string, keyID string) (*SSHSession, error)
+	CreateSSHSession(ctx context.Context, token string, sshSession *SSHSession, userID string, encryptedPassword string, keyID string) (*SSHSession, error)
 	GetSSHSessions(ctx context.Context, token string, userID string) ([]*SSHSession, error)
 	GetSSHSessionByID(ctx context.Context, token string, sessionID string) (*SSHSession, error)
 	GetPassword(ctx context.Context, token string, sessionID string) (string, error)
@@ -73,7 +73,7 @@ type SSHSessionRepository interface {
 type SSHSessionService interface {
 	CreateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
 	GetSSHSessions(ctx context.Context) ([]*SSHSession, error)
-	EncryptPassword(ctx context.Context, derivedPassword string, salt []byte) (string, error)
+	EncryptPassword(ctx context.Context, password string, salt []byte) (string, error)
 	DecryptPassword(ctx context.Context, password string, encryptedPassword string) (string, error)
 	GenerateSalt(ctx context.Context, size int) ([]byte, error)
 	GetSSHSessionByID(ctx context.Context, sessionID string) (*SSHSession, error)

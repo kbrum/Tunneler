@@ -32,7 +32,7 @@ func (r *SupabaseSSHSessionRepository) getClient(token string) (*supabase.Client
 	return supabase.NewClient(os.Getenv("SUPABASE_URL"), os.Getenv("PUBLIC_SUPABASE_KEY"), opts)
 }
 
-func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, token string, sshSession *domain.SSHSession, userID string, hashedPassword string, keyID string) (*domain.SSHSession, error) {
+func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, token string, sshSession *domain.SSHSession, userID string, encryptedPassword string, keyID string) (*domain.SSHSession, error) {
 	client, err := r.getClient(token)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, tok
 		IP:       sshSession.IP,
 		Port:     sshSession.Port,
 		User:     sshSession.User,
-		Password: hashedPassword,
+		Password: encryptedPassword,
 		UserID:   userID,
 		KeyID:    keyID,
 		AuthType: sshSession.AuthType,

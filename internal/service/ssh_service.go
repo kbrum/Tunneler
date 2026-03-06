@@ -15,7 +15,6 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/argon2"
-	"golang.org/x/crypto/bcrypt"
 )
 
 const encryptedPasswordParts = 3
@@ -70,12 +69,17 @@ func (s *SSHService) CreateSSHSession(ctx context.Context, sshSession *domain.SS
 		return nil, err
 	}
 
-	hashedPassword, err := s.HashPassword(sshSession.Password)
+	salt, err := s.GenerateSalt(ctx, 16)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := s.sshRepo.CreateSSHSession(ctx, localSession.AccessToken, sshSession, sshSession.UserID, hashedPassword, sshSession.KeyID)
+	encryptedPassword, err := s.EncryptPassword(ctx, sshSession.Password, salt)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := s.sshRepo.CreateSSHSession(ctx, localSession.AccessToken, sshSession, sshSession.UserID, encryptedPassword, sshSession.KeyID)
 	if err != nil {
 		return nil, err
 	}
@@ -212,24 +216,6 @@ func (s *SSHService) GetSSHSessions(ctx context.Context) ([]*domain.SSHSession, 
 	return res, nil
 }
 
-func (s *SSHService) HashPassword(password string) (string, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	}
-
-	return string(hashedPassword), nil
-}
-
-func (s *SSHService) VerifyPassword(hashedPassword string, password string) (bool, error) {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-	if err != nil {
-		return false, err
-	}
-
-	return true, nil
-}
-
 func validateSessionID(sessionID string) (string, error) {
 	trimmedSessionID := strings.TrimSpace(sessionID)
 	if trimmedSessionID == "" {
@@ -277,11 +263,16 @@ func (s *SSHService) UpdateSSHSession(ctx context.Context, sshSession *domain.SS
 	sshSession.UserID = localSession.User.ID
 
 	if sshSession.Password != "" {
-		hashedPassword, err := s.HashPassword(sshSession.Password)
+		salt, err := s.GenerateSalt(ctx, 16)
 		if err != nil {
 			return nil, err
 		}
-		sshSession.Password = hashedPassword
+
+		encryptedPassword, err := s.EncryptPassword(ctx, sshSession.Password, salt)
+		if err != nil {
+			return nil, err
+		}
+		sshSession.Password = encryptedPassword
 	}
 
 	if err := domain.ValidadeSSHSession(sshSession); err != nil {

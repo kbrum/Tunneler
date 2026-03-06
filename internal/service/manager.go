@@ -11,7 +11,7 @@ type ServiceManager struct {
 
 func NewServiceManager(infra *infra.InfraManager) *ServiceManager {
 	return &ServiceManager{
-		UserService: NewUserService(infra.UserInfra, infra.SessionInfra),
+		UserService: NewUserService(infra.UserInfra, infra.SessionInfra, infra.KeyringInfra),
 		SSHService:  NewSSHService(infra.UserInfra, infra.SessionInfra, infra.SSHSessionInfra),
 	}
 }

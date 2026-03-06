@@ -14,6 +14,7 @@ type InfraManager struct {
 	UserInfra          domain.UserRepository
 	SSHSessionInfra    domain.SSHSessionRepository
 	SessionInfra       domain.SessionRepository
+	KeyringInfra       domain.KeyringRepository
 	SSHConnectionInfra domain.SSHConnectionGateway
 }
 
@@ -23,6 +24,7 @@ func NewInfraManager(db *sql.DB, client *supabase.Client, logger *slog.Logger) *
 		UserInfra:          NewSupabaseUserRepository(client),
 		SSHSessionInfra:    NewSupabaseSSHSessionRepository(client),
 		SessionInfra:       NewSqliteSessionRepository(db),
+		KeyringInfra:       NewKeyringRepository("tunneler"),
 		SSHConnectionInfra: NewSSHConnectionGateway(logger),
 	}
 }
