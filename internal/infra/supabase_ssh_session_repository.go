@@ -2,8 +2,6 @@ package infra
 
 import (
 	"context"
-	"crypto/rand"
-	"fmt"
 	"os"
 
 	"tunneler/internal/domain"
@@ -99,17 +97,6 @@ func (r *SupabaseSSHSessionRepository) CreateSSHSession(ctx context.Context, tok
 	}
 
 	return res, nil
-}
-
-func (r *SupabaseSSHSessionRepository) CreateKeySalt(ctx context.Context, size int) ([]byte, error) {
-	if size < 16 {
-		return nil, fmt.Errorf("salt size must be >= 16 bytes")
-	}
-	salt := make([]byte, size)
-	if _, err := rand.Read(salt); err != nil {
-		return nil, err
-	}
-	return salt, nil
 }
 
 func (r *SupabaseSSHSessionRepository) GetSSHSessions(ctx context.Context, token string, userID string) ([]*domain.SSHSession, error) {

@@ -2,14 +2,23 @@ package service
 
 import (
 	"context"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
+	"encoding/base64"
+	"errors"
+	"fmt"
 	"strings"
 	"time"
 
 	"tunneler/internal/domain"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/argon2"
 	"golang.org/x/crypto/bcrypt"
 )
+
+const encryptedPasswordParts = 3
 
 var _ domain.SSHSessionService = (*SSHService)(nil)
 
@@ -72,6 +81,119 @@ func (s *SSHService) CreateSSHSession(ctx context.Context, sshSession *domain.SS
 	}
 
 	return data, nil
+}
+
+func (s *SSHService) DeriveSessionKey(loginPassword string, salt []byte) ([]byte, error) {
+	if loginPassword == "" {
+		return nil, errors.New("login password cannot be empty")
+	}
+	if len(salt) < 16 {
+		return nil, errors.New("salt must be at least 16 bytes")
+	}
+
+	key := argon2.IDKey(
+		[]byte(loginPassword),
+		salt,
+		3,
+		64*1024,
+		2,
+		32,
+	)
+
+	return key, nil
+}
+
+func (s *SSHService) GenerateSalt(ctx context.Context, size int) ([]byte, error) {
+	if size < 16 {
+		return nil, fmt.Errorf("salt size must be >= 16 bytes")
+	}
+	salt := make([]byte, size)
+	if _, err := rand.Read(salt); err != nil {
+		return nil, err
+	}
+	return salt, nil
+}
+
+func (s *SSHService) EncryptPassword(ctx context.Context, password string, salt []byte) (string, error) {
+	if password == "" {
+		return "", errors.New("password cannot be empty")
+	}
+
+	key, err := s.DeriveSessionKey(password, salt)
+	if err != nil {
+		return "", err
+	}
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+
+	nonce := make([]byte, gcm.NonceSize())
+	if _, err := rand.Read(nonce); err != nil {
+		return "", err
+	}
+
+	ciphertext := gcm.Seal(nil, nonce, []byte(password), nil)
+
+	saltBase64 := base64.StdEncoding.EncodeToString(salt)
+	nonceBase64 := base64.StdEncoding.EncodeToString(nonce)
+	ciphertextBase64 := base64.StdEncoding.EncodeToString(ciphertext)
+
+	return strings.Join([]string{saltBase64, nonceBase64, ciphertextBase64}, ":"), nil
+}
+
+func (s *SSHService) DecryptPassword(ctx context.Context, password string, encryptedPassword string) (string, error) {
+	if password == "" {
+		return "", errors.New("password cannot be empty")
+	}
+
+	parts := strings.Split(encryptedPassword, ":")
+	if len(parts) != encryptedPasswordParts {
+		return "", errors.New("invalid encrypted password payload")
+	}
+
+	salt, err := base64.StdEncoding.DecodeString(parts[0])
+	if err != nil {
+		return "", err
+	}
+
+	nonce, err := base64.StdEncoding.DecodeString(parts[1])
+	if err != nil {
+		return "", err
+	}
+
+	ciphertext, err := base64.StdEncoding.DecodeString(parts[2])
+	if err != nil {
+		return "", err
+	}
+
+	key, err := s.DeriveSessionKey(password, salt)
+	if err != nil {
+		return "", err
+	}
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+
+	plainPassword, err := gcm.Open(nil, nonce, ciphertext, nil)
+	if err != nil {
+		return "", err
+	}
+
+	return string(plainPassword), nil
 }
 
 func (s *SSHService) GetSSHSessions(ctx context.Context) ([]*domain.SSHSession, error) {
