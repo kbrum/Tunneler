@@ -248,6 +248,14 @@ func (s *SSHService) GetSSHSessionByID(ctx context.Context, sessionID string) (*
 	return data, nil
 }
 
+func (s *SSHService) ConnectSession(ctx context.Context) error {
+	return nil
+}
+
+func (s *SSHService) DisconnectSession(ctx context.Context) error {
+	return nil
+}
+
 func (s *SSHService) UpdateSSHSession(ctx context.Context, sshSession *domain.SSHSession) (*domain.SSHSession, error) {
 	localSession, err := s.ensureValidSession(ctx)
 	if err != nil {

@@ -77,6 +77,8 @@ type SSHSessionService interface {
 	DecryptPassword(ctx context.Context, password string, encryptedPassword string) (string, error)
 	GenerateSalt(ctx context.Context, size int) ([]byte, error)
 	GetSSHSessionByID(ctx context.Context, sessionID string) (*SSHSession, error)
+	ConnectSession(ctx context.Context) error
+	DisconnectSession(ctx context.Context) error
 	UpdateSSHSession(ctx context.Context, sshSession *SSHSession) (*SSHSession, error)
 	DeleteSSHSession(ctx context.Context, sessionID string) (bool, error)
 }
