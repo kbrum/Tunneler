@@ -3,6 +3,7 @@ package domain
 import (
 	"context"
 	"errors"
+	"io"
 	"time"
 )
 
@@ -85,7 +86,11 @@ type SSHSessionService interface {
 
 type SSHConnectionGateway interface {
 	DialSession(ctx context.Context, hostIP string, port string, password string, username string) error
-	ConnectSessionAsync(ctx context.Context) error
+	ConnectSessionAsync(ctx context.Context, hostIP string, port string, password string, username string) error
+	Stdin() (io.WriteCloser, error)
+	Stdout() (io.Reader, error)
+	Stderr() (io.Reader, error)
+	Wait() (<-chan error, error)
 	DisconnectSession(ctx context.Context) error
 }
 
