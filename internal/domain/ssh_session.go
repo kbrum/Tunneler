@@ -84,8 +84,9 @@ type SSHSessionService interface {
 }
 
 type SSHConnectionGateway interface {
-	ConnectSession(ctx context.Context, hostIP string, port string, password string, username string) error
-	DisconnectSession(ctx context.Context, hostIP string, port string, password string, username string) error
+	DialSession(ctx context.Context, hostIP string, port string, password string, username string) error
+	ConnectSessionAsync(ctx context.Context) error
+	DisconnectSession(ctx context.Context) error
 }
 
 var (

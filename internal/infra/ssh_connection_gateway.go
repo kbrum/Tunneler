@@ -13,10 +13,15 @@ func NewSSHConnectionGateway(logger *slog.Logger) *SSHConnectionGateway {
 	return &SSHConnectionGateway{logger: logger}
 }
 
-func (g *SSHConnectionGateway) ConnectSession(ctx context.Context, hostIP string, port string, password string, username string) error {
+func (g *SSHConnectionGateway) DialSession(ctx context.Context, hostIP string, port string, password string, username string) error {
 	return nil
 }
 
-func (g *SSHConnectionGateway) DisconnectSession(ctx context.Context, hostIP string, port string, password string, username string) error {
+func (g *SSHConnectionGateway) ConnectSessionAsync(ctx context.Context) error {
+
+	return nil
+}
+
+func (g *SSHConnectionGateway) DisconnectSession(ctx context.Context) error {
 	return nil
 }
